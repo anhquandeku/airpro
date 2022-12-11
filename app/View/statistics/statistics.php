@@ -11,7 +11,7 @@ View::$activeItem = 'statistics';
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
+    <title>AirPro</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
@@ -49,7 +49,6 @@ View::$activeItem = 'statistics';
                                         onchange="timeAjax()">
                                         <option value="ngay">Thống kê theo ngày</option>
                                         <option value="thang">Thống kê theo tháng</option>
-                                        <option value="quy">Thống kê theo quý</option>
                                         <option value="nam">Thống kê theo năm</option>
                                     </select>
                                 </div>
@@ -94,6 +93,25 @@ View::$activeItem = 'statistics';
                             </div>
                         </div>
                     </section>
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table mb-0 table-danger" id="table1">
+                                        <thead>
+                                            <tr>
+                                                <th>Thời gian</th>
+                                                <th>Tổng tiền thu được</th>
+                                                <th>Tổng tiền vốn</th>
+                                                <th>Lợi nhuận</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -121,9 +139,47 @@ View::$activeItem = 'statistics';
     $(function() {
         $('#view-ngaybd').val(new Date().toDateInputValue());
         $('#view-ngaykt').val(new Date().toDateInputValue());
+        let data = {
+            ngaybd: $('#view-ngaybd').val(),
+            ngaykt: $('#view-ngaykt').val()
+        };
+        cates = [];
+        datas = [];
         cates.push($('#view-ngaykt').val());
-        datas.push(Math.floor(Math.random() * 30) + 20);
-        run();
+        $.post(`http://localhost/SoftwareTechnologyAdmin/statistics/statisticByDay`, data, function(response) {
+            tien = response.data;
+            tien.forEach(data => {
+                datas.push(Math.round(data.loinhuan / 10000000 * 100) / 100);
+            });
+            run();
+            const table1 = $('#table1 > tbody');
+            table1.empty();
+            checkedRows = [];
+            $row = 0;
+
+            tien.forEach(data => {
+                let disabled = "disabled btn icon icon-left btn-secondary";
+                if ($row % 2 == 0) {
+
+                    table1.append(`
+                    <tr class="table-light">
+                        <td>${data.thoigian}</td>
+                        <td>${data.tienthuve}</td>
+                        <td>${data.tienvon}</td>                        
+                        <td>${data.loinhuan}</td>
+                    </tr>`);
+                } else {
+                    table1.append(`
+                    <tr class="table-info">
+                        <td>${data.thoigian}</td>
+                        <td>${data.tienthuve}</td>
+                        <td>${data.tienvon}</td>                        
+                        <td>${data.loinhuan}</td>
+                    </tr>`);
+                }
+                $row += 1;
+            });
+        });
     });
 
     function checkdate() {
@@ -137,34 +193,45 @@ View::$activeItem = 'statistics';
         } else {
             cates = [];
             datas = [];
-            var temp = $('#view-ngaybd').val();
-            while (temp <= $('#view-ngaykt').val()) {
-                cates.push(temp);
-                datas.push(Math.floor(Math.random() * 30) + 20);
-                var d = temp.substr(8, 2);
-                var m = temp.substr(5, 2);
-                var y = temp.substr(0, 4);
-
-                if (m == "02" && d == "28") {
-                    m = "03";
-                    d = "01";
-                } else if (d == "31" && m == "12") {
-                    d = "01";
-                    m = "01";
-                    y = (Number(y) + 1).toString();
-                } else if (d == "31") {
-                    d = "01";
-                    var x = Number(m) + 1;
-                    if (x < 10) m = "0" + x.toString();
-                    else m = x.toString();
-                } else {
-                    var x = Number(d) + 1;
-                    if (x < 10) d = "0" + x.toString();
-                    else d = x.toString();
-                }
-                temp = y + "-" + m + "-" + d;
+            let data = {
+                ngaybd: $('#view-ngaybd').val(),
+                ngaykt: $('#view-ngaykt').val()
             }
-            run();
+            $.post(`http://localhost/SoftwareTechnologyAdmin/statistics/statisticByDay`, data, function(response) {
+                tien = response.data;
+                tien.forEach(data => {
+                    datas.push(Math.round(data.loinhuan / 10000000 * 100) / 100);
+                    cates.push(data.thoigian);
+                });
+                run();
+                const table1 = $('#table1 > tbody');
+                table1.empty();
+                checkedRows = [];
+                $row = 0;
+
+                tien.forEach(data => {
+                    let disabled = "disabled btn icon icon-left btn-secondary";
+                    if ($row % 2 == 0) {
+
+                        table1.append(`
+                        <tr class="table-light">
+                            <td>${data.thoigian}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    } else {
+                        table1.append(`
+                        <tr class="table-info">
+                            <td>${data.thoigian}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    }
+                    $row += 1;
+                });
+            });
         }
     }
 
@@ -179,50 +246,45 @@ View::$activeItem = 'statistics';
         } else {
             cates = [];
             datas = [];
-            var temp = $('#thangbd').val();
-            while (temp <= $('#thangkt').val()) {
-                cates.push(temp);
-                datas.push(Math.floor(Math.random() * 200) + 100);
-                var m = temp.substr(5, 2);
-                var y = temp.substr(0, 4);
-                if (m == "12") {
-                    m = "01";
-                    y = (Number(y) + 1).toString();
-                } else {
-                    var x = Number(m) + 1;
-                    if (x < 10) m = "0" + x.toString();
-                    else m = x.toString();
-                }
-                temp = y + "-" + m;
+            let data = {
+                thangbd: $('#thangbd').val(),
+                thangkt: $('#thangkt').val()
             }
-            run();
-        }
-    }
+            $.post(`http://localhost/SoftwareTechnologyAdmin/statistics/statisticByMonth`, data, function(response) {
+                tien = response.data;
+                tien.forEach(data => {
+                    datas.push(Math.round(data.loinhuan / 10000000 * 100) / 100);
+                    cates.push(data.nam + "-" + data.thang);
+                });
+                run();
+                const table1 = $('#table1 > tbody');
+                table1.empty();
+                checkedRows = [];
+                $row = 0;
 
-    function checkquar() {
-        if ($('#quybd').val() > $('#quykt').val()) {
-            alert("Quý bắt đầu không được lớn hơn quý kết thúc");
-            $('#quybd').focus();
-            $('#quybd').val($('#quykt').val());
-        } else {
-            cates = [];
-            datas = [];
-            var temp = $('#quybd').val();
-            while (temp <= $('#quykt').val()) {
-                cates.push(temp);
-                datas.push(Math.floor(Math.random() * 300) + 500);
-                var m = temp.substr(5, 2);
-                var y = temp.substr(0, 4);
-                if (m == "04") {
-                    m = "01";
-                    y = (Number(y) + 1).toString();
-                } else {
-                    var x = Number(m) + 1;
-                    m = "0" + x.toString();
-                }
-                temp = y + "-" + m;
-            }
-            run();
+                tien.forEach(data => {
+                    let disabled = "disabled btn icon icon-left btn-secondary";
+                    if ($row % 2 == 0) {
+
+                        table1.append(`
+                        <tr class="table-light">
+                            <td>${data.nam+"-"+data.thang}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    } else {
+                        table1.append(`
+                        <tr class="table-info">
+                            <td>${data.nam+"-"+data.thang}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    }
+                    $row += 1;
+                });
+            });
         }
     }
 
@@ -234,13 +296,41 @@ View::$activeItem = 'statistics';
         } else {
             cates = [];
             datas = [];
-            var temp = $('#yearbd').val();
-            while (temp <= $('#yearkt').val()) {
-                cates.push(temp);
-                datas.push(Math.floor(Math.random() * 300) + 500);
-                temp = (Number(temp) + 1).toString();
-            }
-            run();
+            $.post(`http://localhost/SoftwareTechnologyAdmin/statistics/statisticByYear`, data, function(response) {
+                tien = response.data;
+                tien.forEach(data => {
+                    datas.push(Math.round(data.loinhuan / 10000000 * 100) / 100);
+                    cates.push(data.thoigian);
+                });
+                run();
+                const table1 = $('#table1 > tbody');
+                table1.empty();
+                checkedRows = [];
+                $row = 0;
+
+                tien.forEach(data => {
+                    let disabled = "disabled btn icon icon-left btn-secondary";
+                    if ($row % 2 == 0) {
+
+                        table1.append(`
+                        <tr class="table-light">
+                            <td>${data.thoigian}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    } else {
+                        table1.append(`
+                        <tr class="table-info">
+                            <td>${data.thoigian}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    }
+                    $row += 1;
+                });
+            });
         }
     }
 
@@ -278,9 +368,45 @@ View::$activeItem = 'statistics';
             $('#view-ngaykt').val(new Date().toDateInputValue());
             cates = [];
             datas = [];
-            cates.push($('#view-ngaybd').val());
-            datas.push(Math.floor(Math.random() * 200) + 100);
-            run();
+            let data = {
+                ngaybd: $('#view-ngaybd').val(),
+                ngaykt: $('#view-ngaykt').val()
+            };
+            $.post(`http://localhost/SoftwareTechnologyAdmin/statistics/statisticByDay`, data, function(response) {
+                tien = response.data;
+                tien.forEach(data => {
+                    datas.push(Math.round(data.loinhuan / 10000000 * 100) / 100);
+                    cates.push(data.thoigian);
+                });
+                run();
+                const table1 = $('#table1 > tbody');
+                table1.empty();
+                checkedRows = [];
+                $row = 0;
+
+                tien.forEach(data => {
+                    let disabled = "disabled btn icon icon-left btn-secondary";
+                    if ($row % 2 == 0) {
+
+                        table1.append(`
+                        <tr class="table-light">
+                            <td>${data.thoigian}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    } else {
+                        table1.append(`
+                        <tr class="table-info">
+                            <td>${data.thoigian}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    }
+                    $row += 1;
+                });
+            });
 
         } else if (search == "thang") {
             $('#view-time').empty();
@@ -314,51 +440,46 @@ View::$activeItem = 'statistics';
             $('#thangkt').val(new Date().toDateInputValue().substr(0, 7));
             cates = [];
             datas = [];
-            cates.push($('#thangbd').val());
-            datas.push(Math.floor(Math.random() * 200) + 100);
-            run();
+            let data = {
+                thangbd: $('#thangbd').val(),
+                thangkt: $('#thangkt').val()
+            };
+            $.post(`http://localhost/SoftwareTechnologyAdmin/statistics/statisticByMonth`, data, function(response) {
+                tien = response.data;
+                tien.forEach(data => {
+                    datas.push(Math.round(data.loinhuan / 10000000 * 100) / 100);
+                    cates.push(data.nam + "-" + data.thang);
+                });
+                run();
+                const table1 = $('#table1 > tbody');
+                table1.empty();
+                checkedRows = [];
+                $row = 0;
 
-        } else if (search == "quy") {
-            $('#view-time').empty();
-            $('#view-time').append(`<div class="col-12 col-md-4">
-                                <div class="form-group row align-items-center">
-                                    <div class="col-lg-5 col-6">
-                                        <label class="col-form-label">
-                                            <h6>Quý bắt đầu</h6>
-                                        </label>
-                                    </div>
-                                    <div class="col-lg-5 col-6">
-                                    <select class="form-select" id="quybd" onchange="checkquar()">
-                                        <option value="2021-04">04/2021</option>
-                                        <option value="2021-03">03/2021</option>
-                                        <option value="2021-02">02/2021</option>
-                                        <option value="2021-01">01/2021</option>
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <div class="form-group row align-items-center">
-                                    <div class="col-lg-5 col-6">
-                                        <label class="col-form-label">
-                                            <h6>Quý kết thúc</h6>
-                                        </label>
-                                    </div>
-                                    <div class="col-lg-5 col-6">
-                                    <select class="form-select" id="quykt" onchange="checkquar()">
-                                        <option value="2021-04">04/2021</option>
-                                        <option value="2021-03">03/2021</option>
-                                        <option value="2021-02">02/2021</option>
-                                        <option value="2021-01">01/2021</option>
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>`);
-            cates = [];
-            datas = [];
-            cates.push($('#quybd').val());
-            datas.push(Math.floor(Math.random() * 300) + 500);
-            run();
+                tien.forEach(data => {
+                    let disabled = "disabled btn icon icon-left btn-secondary";
+                    if ($row % 2 == 0) {
+
+                        table1.append(`
+                        <tr class="table-light">
+                            <td>${data.nam+"-"+data.thang}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    } else {
+                        table1.append(`
+                        <tr class="table-info">
+                            <td>${data.nam+"-"+data.thang}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    }
+                    $row += 1;
+                });
+            });
+
         } else if (search == "nam") {
             $('#view-time').empty();
             $('#view-time').append(`<div class="col-12 col-md-4">
@@ -387,7 +508,7 @@ View::$activeItem = 'statistics';
                                     </div>
                                 </div>
                             </div>`);
-            for (var i = 2021; i > 2000; i--) {
+            for (var i = 2022; i > 2000; i--) {
                 $('#yearbd').append(` 
                                     <option value="${i}">${i}</option>`);
                 $('#yearkt').append(` 
@@ -395,9 +516,45 @@ View::$activeItem = 'statistics';
             }
             cates = [];
             datas = [];
-            cates.push($('#yearbd').val());
-            datas.push(Math.floor(Math.random() * 500) + 1000);
-            run();
+            let data = {
+                nambd: $('#yearbd').val(),
+                namkt: $('#yearkt').val()
+            };
+            $.post(`http://localhost/SoftwareTechnologyAdmin/statistics/statisticByYear`, data, function(response) {
+                tien = response.data;
+                tien.forEach(data => {
+                    datas.push(Math.round(data.loinhuan / 10000000 * 100) / 100);
+                    cates.push(data.thoigian);
+                });
+                run();
+                const table1 = $('#table1 > tbody');
+                table1.empty();
+                checkedRows = [];
+                $row = 0;
+
+                tien.forEach(data => {
+                    let disabled = "disabled btn icon icon-left btn-secondary";
+                    if ($row % 2 == 0) {
+
+                        table1.append(`
+                        <tr class="table-light">
+                            <td>${data.thoigian}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    } else {
+                        table1.append(`
+                        <tr class="table-info">
+                            <td>${data.thoigian}</td>
+                            <td>${data.tienthuve}</td>
+                            <td>${data.tienvon}</td>                        
+                            <td>${data.loinhuan}</td>
+                        </tr>`);
+                    }
+                    $row += 1;
+                });
+            });
         }
     }
 
@@ -420,7 +577,7 @@ View::$activeItem = 'statistics';
             },
             plotOptions: {},
             series: [{
-                name: "Doanh thu (tỷ đồng)",
+                name: "Lợi nhuận (chục triệu)",
                 data: datas,
             }, ],
             colors: "#435ebe",

@@ -18,23 +18,52 @@ class StatisticsController extends Controller
     public function statistics()
     {
         Auth::checkAuthentication();
-        //Auth::ktraquyen("CN01");
+        Auth::ktraquyen("CN12");
         $this->View->render('statistics/statistics');
     }
 
-    public static function statisticByDay(){
-
+    public function statisticByDay(){
+        Auth::checkAuthentication();
+        Auth::ktraquyen("CN12");
+        $ngaybd = Request::post('ngaybd');
+        $ngaykt = Request::post('ngaykt');
+        $kq = StatisticsModel::statisticByDay($ngaybd,$ngaykt);
+        if($kq == null ){
+            $response['thanhcong'] = false;
+        } else{   
+            $response['data'] = $kq['data'];
+            $response['thanhcong'] = true;
+        }
+        $this->View->renderJSON($response);
     }
 
-    public static function statisticByMonth(){
-        
+    public function statisticByMonth(){
+        Auth::checkAuthentication();
+        Auth::ktraquyen("CN12");
+        $thangbd = Request::post('thangbd');
+        $thangkt = Request::post('thangkt');
+        $kq = StatisticsModel::statisticByMonth($thangbd,$thangkt);
+        if($kq == null ){
+            $response['thanhcong'] = false;
+        } else{   
+            $response['data'] = $kq['data'];
+            $response['thanhcong'] = true;
+        }
+        $this->View->renderJSON($response);
     }
 
-    public static function statisticByQuarterly(){
-        
-    }
-
-    public static function statisticByYear(){
-        
+    public function statisticByYear(){
+        Auth::checkAuthentication();
+        Auth::ktraquyen("CN12");
+        $nambd = Request::post('nambd');
+        $namkt = Request::post('namkt');
+        $kq = StatisticsModel::statisticByYear($nambd,$namkt);
+        if($kq == null ){
+            $response['thanhcong'] = false;
+        } else{   
+            $response['data'] = $kq['data'];
+            $response['thanhcong'] = true;
+        }
+        $this->View->renderJSON($response);
     }
 }
