@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Config;
 use App\Core\Session;
 use App\Core\View;
 ?>
@@ -24,10 +25,10 @@ use App\Core\View;
         <div class="row h-100">
             <div class="col-lg-6 col-12">
                 <div id="auth-left">
-                    <h1 class="auth-title">Đăng nhập.</h1>
+                    <h1 class="auth-title">Đăng nhập</h1>
                     <p class="auth-subtitle mb-5">Nhập thông tin của bạn để đăng nhập</p>
                     <div id="login-error" class="alert alert-danger d-none">Lỗi nè</div>
-                    <form name="login-form" action="<?= View::getAction('AuthController', 'loginPost') ?>" method="POST">
+                    <form name="login-form" method="POST">
                         <div class="form-group position-relative has-icon-left mb-4">
                             <input id="email" type="text" name="email" class="form-control form-control-xl" placeholder="Tên đăng nhập">
                             <div class="form-control-icon">
@@ -43,7 +44,7 @@ use App\Core\View;
                         <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Đăng nhập</button>
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
-                            <a href="<?= View::url('auth/forgotpassword') ?>" class="font-bold">Quên mật khẩu?</a>.
+                        <a href="<?= View::url('auth/forgotpassword') ?>" class="font-bold">Quên mật khẩu?</a>.
                     </div>
                     <div class="text-center mt-5 text-lg fs-4">
                         <p class="text-gray-600">Bạn chưa có tài khoản?
@@ -54,7 +55,7 @@ use App\Core\View;
             </div>
             <div class="col-lg-6 d-none d-lg-block">
                 <div id="auth-right">
-                    <img src="<?= View::assets('images/bg/login.jpg')?>" class=" d-block w-100">
+                    <img src="<?= View::assets('images/bg/login.jpg') ?>" class=" d-block w-100">
                 </div>
             </div>
         </div>
@@ -62,8 +63,6 @@ use App\Core\View;
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script>
-        // Cách viết ngắn của $( document ).ready()
-        // Đợi page load xong
         $(function() {
             // Select form có name = login-form (giống như select bằng js thuần)
             $("form[name='login-form']").validate({
@@ -87,42 +86,33 @@ use App\Core\View;
                     },
                 },
                 // JQuery sẽ chặn submit đến khi nào dữ liệu đã được validate
-                submitHandler: function(form) {
-                    dangNhapAjax()
+                submitHandler: function(form, event) {
+                    event.preventDefault();
+                    const data = Object.fromEntries(new FormData(form).entries());
+                    dangNhapAjax(data);
                 }
             });
 
-            function dangNhapAjax() {
+            function dangNhapAjax(data) {
                 $('#login-error').text("")
                 $('#login-error').addClass("d-none")
-                // lay gia tri input
-                const email = $("#email").val()
-                const password = $("#password").val()
-
                 // dung ajax de submit 1 2 3
+                console.log(data);
                 $.ajax({
-                    url: "http://localhost/Software-Technology/auth/loginPost",
+                    url: `<?= Config::get('URL') ?>auth/loginPost`,
                     type: "post",
-                    data: {
-                        email: email,
-                        password: password
-                    },
+                    data: data,
                     success: function(result) {
-                        console.log(result);
-                        console.log(result['summary']);
                         if (!result['thanhcong']) {
                             $('#login-error').text(result['summary'])
                             $('#login-error').removeClass("d-none")
-                        }
-                        else{
-                            window.location.href = 'http://localhost/Software-Technology/'
+                        } else {
+                            window.location.href = `<?= Config::get('URL') ?>`
                         }
 
                     }
                 });
-
             }
-
         });
     </script>
 </body>

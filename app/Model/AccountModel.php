@@ -25,7 +25,7 @@ class AccountModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $query = $database->prepare("SELECT * FROM tai_khoan  WHERE username = :email AND ma_tk = ma_tk LIMIT 1");
+        $query = $database->prepare("SELECT * FROM tai_khoan  WHERE username = :email LIMIT 1");
         $query->execute([':email' => $email]);
 
         if ($row = $query->fetch()) {

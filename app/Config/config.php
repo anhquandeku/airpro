@@ -15,7 +15,7 @@ return array(
     // Cấu hình db
     'DB_TYPE' => 'mysql',
     'DB_HOST' => 'localhost',
-    'DB_NAME' => 'flight_management',
+    'DB_NAME' => 'airpro',
     'DB_USER' => 'root',
     'DB_PASS' => '',
     'DB_PORT' => '3306',

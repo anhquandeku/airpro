@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Config;
 use App\Core\View;
 ?>
 <!DOCTYPE html>
@@ -11,18 +12,18 @@ use App\Core\View;
     <title>Register - Mazer Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= View::assets('css/bootstrap.css') ?>">
-    <link rel="stylesheet" href="<?= View::assets('vendors/toastify/toastify.css') ?>" />
     <link rel="stylesheet" href="<?= View::assets('vendors/bootstrap-icons/bootstrap-icons.css') ?>">
     <link rel="stylesheet" href="<?= View::assets('css/app.css') ?>">
     <link rel="stylesheet" href="<?= View::assets('css/pages/auth.css') ?>">
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon')" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
     <div id="auth">
         <div class="row h-100">
-            <div class="col-lg-4 offset-lg-4 col-12" >
-                <div id="auth-left">
+            <div class="col-lg-4 offset-lg-4 col-12">
+                <div>
                     <h1 class="auth-title">Đăng ký</h1>
                     <p class="auth-subtitle mb-2">Nhập thông tin của bạn để tiến hành đăng ký.</p>
 
@@ -66,9 +67,10 @@ use App\Core\View;
             </div>
         </div>
     </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
     <script>
         $(function() {
             $("form[name='register-form']").validate({
@@ -77,7 +79,7 @@ use App\Core\View;
                         required: true,
                         email: true,
                         remote: {
-                            url: "http://localhost/Software-Technology/account/checkValidEmailRegister",
+                            url: `<?= Config::get('URL') ?>/account/checkValidEmailRegister`,
                             type: "POST",
                         }
                     },
@@ -112,27 +114,12 @@ use App\Core\View;
                     event.preventDefault();
                     // lấy dữ liệu từ form
                     const data = Object.fromEntries(new FormData(form).entries());
-                    console.log(data);
-
-                    $.post(`http://localhost/Software-Technology/account/register`, data, function(response) {
+                    $.post(`<?= Config::get('URL') ?>/account/register`, data, function(response) {
                         if (response.thanhcong) {
-                            Toastify({
-                                text: "Đăng ký thành công",
-                                duration: 1000,
-                                close: true,
-                                gravity: "top",
-                                position: "center",
-                                backgroundColor: "#4fbe87",
-                            }).showToast();
+                            showToast("Đăng ký thành công");
+                            window.location.href = `<?= Config::get('URL') ?>`
                         } else {
-                            Toastify({
-                                text: "Đăng ký thất bại",
-                                duration: 1000,
-                                close: true,
-                                gravity: "top",
-                                position: "center",
-                                backgroundColor: "#FF6A6A",
-                            }).showToast();
+                            showToast("Đăng ký thất bại")
                         }
                     });
                     $('#email').val("");

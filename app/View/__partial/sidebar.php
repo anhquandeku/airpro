@@ -31,25 +31,25 @@ use App\Core\View;
                     </a>
                 </li>
                 <li id="CN01" class=" sidebar-item  <?= View::$activeItem == 'account' ? 'active' : '' ?>">
-                    <a href="<?= View::url('account/account') ?>" class="sidebar-link">
+                    <a href="<?= View::url('account/') ?>" class="sidebar-link">
                         <i class="bi bi-person-circle"></i>
                         <span>Tài khoản</span>
                     </a>
                 </li>
                 <li id="CN02" class=" sidebar-item  <?= View::$activeItem == 'airline' ? 'active' : '' ?>">
-                    <a href="<?= View::url('airline/airline') ?>" class="sidebar-link">
+                    <a href="<?= View::url('airline/') ?>" class="sidebar-link">
                         <i class="bi bi-cloud"></i>
                         <span>Hãng hàng không</span>
                     </a>
                 </li>
                 <li id="CN03" class=" sidebar-item  <?= View::$activeItem == 'airport' ? 'active' : '' ?>">
-                    <a href="<?= View::url('airport/airport') ?>" class="sidebar-link">
+                    <a href="<?= View::url('airport/') ?>" class="sidebar-link">
                         <i class="bi bi-pentagon"></i>
                         <span>Sân bay</span>
                     </a>
                 </li>
                 <li id="CN04" class=" sidebar-item  <?= View::$activeItem == 'customer' ? 'active' : '' ?>">
-                    <a href="<?= View::url('customer/customer') ?>" class="sidebar-link">
+                    <a href="<?= View::url('customer/') ?>" class="sidebar-link">
                         <i class="bi bi-people"></i>
                         <span>Khách hàng</span>
                     </a>

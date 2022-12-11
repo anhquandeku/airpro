@@ -33,6 +33,7 @@ class AuthController extends Controller
         ];
         // Kiểm tra email có tồn tại không
         $user = AccountModel::findOneByEmailLogin($email);
+        
         if (!$user) {
             $result['thanhcong'] = false;
             $result['summary'] = 'Tên đăng nhập hoặc mật khẩu không chính xác';
@@ -48,7 +49,7 @@ class AuthController extends Controller
             return $this->View->renderJSON($result);
         }
         
-        // Kiểm tra tài lhoanr hoạt động
+        // Kiểm tra tài khoản hoạt động
         if($user->trang_thai == 0){
             $result['thanhcong'] = false;
             $result['summary'] = 'Tài khoản đã bị khóa';

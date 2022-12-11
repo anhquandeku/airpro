@@ -1,0 +1,21 @@
+.btn-col {
+  outline: none !important;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+}
+.col-action {
+  display: flex;
+  gap: 0 1rem;
+}
+.row-longtext{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.table-responsive{
+    overflow-x: hidden;
+}

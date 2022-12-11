@@ -15,11 +15,11 @@ class AirlineController extends Controller
         parent::__construct();
     }
 
-    public function airline()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
-        $this->View->render('airline/airline');
+        $this->View->render('airline/index');
     }
 
     public function create(){
@@ -117,8 +117,7 @@ class AirlineController extends Controller
     }
 
     public function addAirline() {
-        Auth::checkAuthentication();
-        // Auth::ktraquyen("CN04");
+        Auth::checkAuthentication();    
         $mahang = Request::post('mahanghangkhong');
         $tenhang = Request::post('tenhanghangkhong');
         $motahang = Request::post('motahanghangkhong');

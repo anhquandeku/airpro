@@ -15,11 +15,11 @@ class AccountController extends Controller
         parent::__construct();
     }
 
-    public function account()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
-        $this->View->render('account/account');
+        $this->View->render('account/index');
     }
 
     public function getAccount()
@@ -41,7 +41,7 @@ class AccountController extends Controller
         $password = Request::post('password');
         $ma = Request::post('ma');
         $maquyen = Request::post('maquyen');
-        $kq = AccountModel::create($email, $password, $maquyen,$ma );
+        $kq = AccountModel::create($email, $password, $maquyen, $ma);
         $response = [
             'thanhcong' => $kq
         ];
@@ -55,7 +55,7 @@ class AccountController extends Controller
         $password = Request::post('password');
         $ma = Request::post('ma');
         $maquyen = Request::post('maquyen');
-        $kq = AccountModel::create2($email, $password, $maquyen,$ma);
+        $kq = AccountModel::create2($email, $password, $maquyen, $ma);
         $response = [
             'thanhcong' => $kq
         ];
@@ -75,7 +75,8 @@ class AccountController extends Controller
         $this->View->renderJSON($response);
     }
 
-    public function forgotPassword(){
+    public function forgotPassword()
+    {
         $email = Request::post('email');
         $kq = AccountModel::forgotPassword($email);
         $response = [
@@ -84,13 +85,14 @@ class AccountController extends Controller
         $this->View->renderJSON($response);
     }
 
-    public function update(){
+    public function update()
+    {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
         $email = Request::post('email');
         $fullname = Request::post('fullname');
         $maquyen = Request::post('maquyen');
-        $kq= AccountModel::update($email,$fullname,$maquyen);
+        $kq = AccountModel::update($email, $fullname, $maquyen);
         $response = [
             'thanhcong' => $kq
         ];
@@ -102,15 +104,16 @@ class AccountController extends Controller
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
         $email = Request::post('email');
-        $kq= AccountModel::delete($email);
+        $kq = AccountModel::delete($email);
         $response = [
             'thanhcong' => $kq
         ];
         $this->View->renderJSON($response);
     }
 
-    public function deletes(){
-        Auth::checkAuthentication();  
+    public function deletes()
+    {
+        Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");     
         $emails = Request::post('emails');
         $emails = json_decode($emails);
@@ -128,20 +131,19 @@ class AccountController extends Controller
         $email = Request::post('email');
         $kq = AccountModel::findOneByEmail($email);
         $response = ['thanhcong' => false];
-        if($kq == null){
+        if ($kq == null) {
             $response['thanhcong'] = false;
-        } else{   
+        } else {
             $response['ma_tk'] = $kq->ma_tk;
             $response['username'] = $kq->username;
             $response['ma_cv'] = $kq->ma_cv;
             $response['thanhcong'] = true;
         }
         $this->View->renderJSON($response);
-        
     }
 
     public function checkValidEmail()
-    {   
+    {
         Auth::checkAuthentication();
         $email = Request::post('email');
         $user = AccountModel::findOneByEmail($email);
@@ -149,13 +151,13 @@ class AccountController extends Controller
         $response = true;
 
         if ($user) {
-            $response = 'Tên đăng nhập đã đựợc người khác sử dụng';
+            $response = false;
         }
         $this->View->renderJSON($response);
     }
 
     public function checkValidEmailRegister()
-    {   
+    {
         $email = Request::post('email');
         $user = AccountModel::findOneByEmail($email);
 
@@ -178,19 +180,22 @@ class AccountController extends Controller
         $this->View->renderJSON($data);
     }
 
-    public function getGiangVien(){
+    public function getGiangVien()
+    {
         Auth::checkAuthentication();
         $data = AccountModel::getGV();
         $this->View->renderJSON($data);
     }
 
-    public function getID(){
+    public function getID()
+    {
         Auth::checkAuthentication();
         $data = AccountModel::getID();
         $this->View->renderJSON($data);
     }
 
-    public function changePassword(){
+    public function changePassword()
+    {
         Auth::checkAuthentication();
         $id = Cookie::get('user_email');
         $user = AccountModel::findOneByEmail($id);
@@ -198,9 +203,9 @@ class AccountController extends Controller
         $newpassword = Request::post('newpassword');
         $isValid = password_verify($oldpassword, $user->hash_password);
         if (!$isValid) {
-            $response=['thanhcong' => false];
+            $response = ['thanhcong' => false];
             return $this->View->renderJSON($response);
-        }else{
+        } else {
             $kq = AccountModel::changePassword($id, $newpassword);
             $response = [
                 'thanhcong' => $kq

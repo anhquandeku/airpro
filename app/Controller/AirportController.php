@@ -15,11 +15,11 @@ class AirportController extends Controller
         parent::__construct();
     }
 
-    public function airport()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
-        $this->View->render('airport/airport');
+        $this->View->render('airport/index');
     }
 
     public function create(){
