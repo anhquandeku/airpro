@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'rank';
 
@@ -9,20 +10,17 @@ View::$activeItem = 'rank';
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
-
+    <title>AirPro</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="<?= View::assets('css/bootstrap.css') ?>" />
-
-    <link rel="stylesheet" href="<?= View::assets('vendors/toastify/toastify.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/bootstrap-icons/bootstrap-icons.css') ?>" />
     <link rel="stylesheet" href="<?= View::assets('css/app.css') ?>" />
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon" />
     <link rel="stylesheet" href="<?= View::assets('css/quan.css') ?>" />
+    <link rel="stylesheet" href="<?= View::assets('css/global.css') ?>" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -250,15 +248,18 @@ View::$activeItem = 'rank';
             </div>
         </div>
     </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
-    <script src="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.min.js') ?>"></script>
-    <script src="<?= View::assets('js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script src="<?= View::assets('js/main.js') ?>"></script>
     <script src="<?= View::assets('js/changepass.js') ?>"></script>
     <script src="<?= View::assets('js/menu.js') ?>"></script>
     <script src="<?= View::assets('js/api.js') ?>"></script>
+    <script src="<?= View::assets('js/html/flight.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+    <script src="<?= View::assets('vendors/boostrap/bootstrap.min.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         let currentPage = 1
         let checkedRows = [];
@@ -273,7 +274,7 @@ View::$activeItem = 'rank';
                     mahang: {
                         required: true,
                         remote: {
-                            url: "http://localhost/Software-Technology/rank/checkvaliemahang",
+                            url: "<?= Config::get('URL') ?>rank/checkvaliemahang",
                             type: "POST",
                         }
                     },
@@ -283,7 +284,7 @@ View::$activeItem = 'rank';
                     mucdiem: {
                         required: true,
                         remote: {
-                            url: "http://localhost/Software-Technology/rank/checkvaliemucdiem",
+                            url: "<?= Config::get('URL') ?>rank/checkvaliemucdiem",
                             type: "POST",
                         }
                     },
@@ -303,7 +304,7 @@ View::$activeItem = 'rank';
                     event.preventDefault();
                     // lấy dữ liệu từ form
                     const data = Object.fromEntries(new FormData(form).entries());
-                    $.post(`http://localhost/Software-Technology/rank/create`, data, function(response) {
+                    $.post(`<?= Config::get('URL') ?>rank/create`, data, function(response) {
                         console.log(response);
                         if (response.thanhcong) {
                             currentPage = 1;
@@ -316,7 +317,7 @@ View::$activeItem = 'rank';
                                 position: "center",
                                 backgroundColor: "#4fbe87",
                             }).showToast();
-                        } else{
+                        } else {
                             Toastify({
                                 text: "Thêm thất bại",
                                 duration: 1000,
@@ -367,10 +368,10 @@ View::$activeItem = 'rank';
             currentPage = 1;
             //alert($('#serch-rank-text').val());
             layDSRankSearchNangCao($('#serch-rank-text').val(), search);
-        },200));
+        }, 200));
 
         function layDSRankAjax() {
-            $.get(`http://localhost/Software-Technology/rank/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
+            $.get(`<?= Config::get('URL') ?>rank/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
                 console.log(response);
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
@@ -419,7 +420,7 @@ View::$activeItem = 'rank';
                                 </button>
                             </td>
                         </tr>`);
-                    } else { 
+                    } else {
                         table1.append(`
                         <tr class="table-info">
                             <td>
@@ -468,10 +469,10 @@ View::$activeItem = 'rank';
                 }
 
             });
-         }
+        }
 
         function layDSRankSearchNangCao(search, search2) {
-            $.get(`http://localhost/Software-Technology/rank/searchRank1?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
+            $.get(`<?= Config::get('URL') ?>rank/searchRank1?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -565,7 +566,7 @@ View::$activeItem = 'rank';
             let data = {
                 mahang: params
             };
-            $.post(`http://localhost/Software-Technology/rank/getRank`, data, function(response) {
+            $.post(`<?= Config::get('URL') ?>rank/getRank`, data, function(response) {
                 if (response.thanhcong) {
                     $("#view-mahang").val(response.mahang);
                     $("#view-tenhang").val(response.tenhang);
@@ -579,7 +580,7 @@ View::$activeItem = 'rank';
         //     let data = {
         //         email: params
         //     };
-        //     $.post(`http://localhost/Software-Technology/user/resetPassword`, data, function(response) {
+        //     $.post(`<?= Config::get('URL') ?>user/resetPassword`, data, function(response) {
         //         if (response.thanhcong) {
 
         //             Toastify({
@@ -609,7 +610,7 @@ View::$activeItem = 'rank';
             let data = {
                 mahang: params
             };
-            $.post(`http://localhost/Software-Technology/rank/getRank`, data, function(response) {
+            $.post(`<?= Config::get('URL') ?>rank/getRank`, data, function(response) {
                 if (response.thanhcong) {
                     $('#re-mahang').val(response.mahang);
                     $('#re-tenhang').val(response.tenhang);
@@ -651,7 +652,7 @@ View::$activeItem = 'rank';
                         // lấy dữ liệu từ form
 
                         const data = Object.fromEntries(new FormData(form).entries());
-                        $.post(`http://localhost/Software-Technology/rank/update`, data, function(response) {
+                        $.post(`<?= Config::get('URL') ?>rank/update`, data, function(response) {
                             console.log(response);
                             if (response.thanhcong) {
                                 currentPage = 1;
@@ -692,9 +693,9 @@ View::$activeItem = 'rank';
             $("#question-rank-modal").modal('toggle');
             $('#thuchien').off('click');
             $("#thuchien").click(function() {
-                $.post(`http://localhost/Software-Technology/rank/delete`, data, function(response) {
+                $.post(`<?= Config::get('URL') ?>rank/delete`, data, function(response) {
                     console.log(response);
-                    if (response.thanhcong==0) {
+                    if (response.thanhcong == 0) {
                         Toastify({
                             text: "Xóa Thành Công",
                             duration: 1000,
@@ -705,7 +706,7 @@ View::$activeItem = 'rank';
                         }).showToast();
                         currentPage = 1;
                         layDSRankAjax();
-                    } else  if(response.thanhcong==1){
+                    } else if (response.thanhcong == 1) {
                         Toastify({
                             text: "Xóa Thất Bại",
                             duration: 1000,
@@ -714,7 +715,7 @@ View::$activeItem = 'rank';
                             position: "center",
                             backgroundColor: "#FF6A6A",
                         }).showToast();
-                    }else {
+                    } else {
                         Toastify({
                             text: "Hạng khách hàng có chứa khách hàng không thể xóa",
                             duration: 1000,
@@ -742,9 +743,9 @@ View::$activeItem = 'rank';
                 let data = {
                     mahang: JSON.stringify(datas)
                 };
-                $.post(`http://localhost/Software-Technology/rank/deletes`, data, function(response) {
+                $.post(`<?= Config::get('URL') ?>rank/deletes`, data, function(response) {
                     console.log(response);
-                    if (response.thanhcong>0) {
+                    if (response.thanhcong > 0) {
                         Toastify({
                             text: response.tb,
                             duration: 1000,

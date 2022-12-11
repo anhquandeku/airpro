@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'promotion';
 
@@ -386,28 +387,28 @@ View::$activeItem = 'promotion';
         $(function() {          
             //kietm tra quyen                    
             layDSKhuyenMaiAjax();
-            $.post(`http://localhost/Software-Technology/promotion/getHangDV`,function(response){
+            $.post(`<?= Config::get('URL')?>promotion/getHangDV`,function(response){
                 let dv=response.data;
                 dv.forEach(data => {
                     let reopt='<option value="'+data.ma_hang_dich_vu+'">'+data.ten_hang+'</option>';
                     $("#re-hangdv").append(reopt);
                 })
             });
-            $.post(`http://localhost/Software-Technology/promotion/getChuyenBay`,function(response){
+            $.post(`<?= Config::get('URL')?>promotion/getChuyenBay`,function(response){
                 let dv=response.data;
                 dv.forEach(data => {
                     let reopt='<option value="'+data.ma_chuyen_bay+'">'+data.ma_chuyen_bay+'</option>';
                     $("#re-chuyenbay").append(reopt);
                 })
             });
-            $.post(`http://localhost/Software-Technology/promotion/getHangHK`,function(response){
+            $.post(`<?= Config::get('URL')?>promotion/getHangHK`,function(response){
                 let dv=response.data;
                 dv.forEach(data => {
                     let reopt='<option value="'+data.ma_hang_hang_khong+'">'+data.ten+'</option>';
                     $("#re-hanghk").append(reopt);
                 })
             });
-            $.post(`http://localhost/Software-Technology/promotion/getHangKH`,function(response){
+            $.post(`<?= Config::get('URL')?>promotion/getHangKH`,function(response){
                 let dv=response.data;
                 dv.forEach(data => {
                     let reopt='<option value="'+data.ma_hang_kh+'">'+data.ten_hang+'</option>';
@@ -462,7 +463,7 @@ View::$activeItem = 'promotion';
                         event.preventDefault();
                         // lấy dữ liệu từ form
                         const data = Object.fromEntries(new FormData(form).entries());                    
-                        $.post(`http://localhost/Software-Technology/promotion/create`, data, function(response) {
+                        $.post(`<?= Config::get('URL')?>promotion/create`, data, function(response) {
                             if (response.thanhcong) {                                
                                 Toastify({
                                     text: "Thêm Thành Công",
@@ -531,7 +532,7 @@ View::$activeItem = 'promotion';
         },200));
 
         function layDSKhuyenMaiAjax() {
-            $.get(`http://localhost/Software-Technology/promotion/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
+            $.get(`<?= Config::get('URL')?>promotion/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -631,7 +632,7 @@ View::$activeItem = 'promotion';
         }
 
         function layDSKhuyenMaiSearchNangCao(search, search2) {
-            $.get(`http://localhost/Software-Technology/promotion/getListSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
+            $.get(`<?= Config::get('URL')?>promotion/getListSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -733,14 +734,14 @@ View::$activeItem = 'promotion';
             let data = {
                 makm: params
             };
-            $.post(`http://localhost/Software-Technology/promotion/getPromotion`, data, function(response) {
+            $.post(`<?= Config::get('URL')?>promotion/getPromotion`, data, function(response) {
                 if (response.thanhcong) {
                     $("#view-makm").val(response.ma_km);
                     $("#view-tenkm").val(response.ten);   
                     $("#view-ngaybdkm").val(response.ngay_bat_dau); 
                     $("#view-ngayktkm").val(response.ngay_ket_thuc); 
                     $("#view-noidungkm").val(response.noi_dung);  
-                    $.post(`http://localhost/Software-Technology/promotion/getPromotionDetail`,data, function(response) {
+                    $.post(`<?= Config::get('URL')?>promotion/getPromotionDetail`,data, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -809,7 +810,7 @@ View::$activeItem = 'promotion';
                 let data = {
                     makm: params
                 };
-                $.post(`http://localhost/Software-Technology/promotion/getPromotion`, data, function(response) {
+                $.post(`<?= Config::get('URL')?>promotion/getPromotion`, data, function(response) {
                     if (response.thanhcong) {
                         $("#re-makm").val(response.ma_km);
                         $("#re-tenkm").val(response.ten);   
@@ -821,7 +822,7 @@ View::$activeItem = 'promotion';
                         $("#re-hanghk").val(-1);
                         $("#re-hangkh").val(-1);
                         $("#re-ptkm").val("");
-                        $.post(`http://localhost/Software-Technology/promotion/getPromotionDetail`,data, function(response) {
+                        $.post(`<?= Config::get('URL')?>promotion/getPromotionDetail`,data, function(response) {
                     // Không được gán biến response này ra ngoài function,
                     // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                     // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -942,7 +943,7 @@ View::$activeItem = 'promotion';
                                     const data = Object.fromEntries(new FormData(form).entries());
                                     data['makm'] = $('#re-makm').val();
                                     
-                                    $.post(`http://localhost/Software-Technology/promotion/update`, data, function(response) {
+                                    $.post(`<?= Config::get('URL')?>promotion/update`, data, function(response) {
                                         if (response.thanhcong) {
                                             currentPage = 1;
                                             layDSKhuyenMaiAjax();
@@ -1030,7 +1031,7 @@ View::$activeItem = 'promotion';
                 ptkm1:ptkm
             };
             data['makm']=$("#re-makm").val();
-            $.post(`http://localhost/Software-Technology/promotion/addDetail`, data, function(response) {
+            $.post(`<?= Config::get('URL')?>promotion/addDetail`, data, function(response) {
                     if (response.thanhcong) {
                         Toastify({
                             text: "Thêm chi tiết Thành Công",
@@ -1067,7 +1068,7 @@ View::$activeItem = 'promotion';
             $("#question-promotion-modal").modal('toggle');
             $('#thuchien').off('click');
             $("#thuchien").click(function() {
-                $.post(`http://localhost/Software-Technology/promotion/deleteDetail`, data, function(response) {
+                $.post(`<?= Config::get('URL')?>promotion/deleteDetail`, data, function(response) {
                     if (response.thanhcong) {
                         Toastify({
                             text: "Xóa chi tiết Thành Công",
@@ -1101,7 +1102,7 @@ View::$activeItem = 'promotion';
             $("#question-promotion-modal").modal('toggle');
             $('#thuchien').off('click');
             $("#thuchien").click(function() {
-                $.post(`http://localhost/Software-Technology/promotion/delete`, data, function(response) {
+                $.post(`<?= Config::get('URL')?>promotion/delete`, data, function(response) {
                     if (response.thanhcong) {
                         Toastify({
                             text: "Xóa Thành Công",
@@ -1142,7 +1143,7 @@ View::$activeItem = 'promotion';
                 let data = {
                     makms: JSON.stringify(datas)
                 };
-                $.post(`http://localhost/Software-Technology/promotion/deletes`, data, function(response) {
+                $.post(`<?= Config::get('URL')?>promotion/deletes`, data, function(response) {
                     if (response.thanhcong) {
                         Toastify({
                             text: "Xóa Thành Công",

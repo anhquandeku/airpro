@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'wallet';
 
@@ -9,21 +10,17 @@ View::$activeItem = 'wallet';
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
-
+    <title>AirPro</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="<?= View::assets('css/bootstrap.css') ?>" />
-
-    <link rel="stylesheet" href="<?= View::assets('vendors/toastify/toastify.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/bootstrap-icons/bootstrap-icons.css') ?>" />
     <link rel="stylesheet" href="<?= View::assets('css/app.css') ?>" />
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon" />
     <link rel="stylesheet" href="<?= View::assets('css/quan.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('css/duc.css') ?>" />
+    <link rel="stylesheet" href="<?= View::assets('css/global.css') ?>" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -116,8 +113,8 @@ View::$activeItem = 'wallet';
                 <div class="modal fade text-left" id="repair-rank-modal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                         <div class="modal-content">
-                            <div class="modal-header" >
-                                <h4 class="modal-title">liên kết ngân hàng</h4>
+                            <div class="modal-header">
+                                <h4 class="modal-title">Liên kết ngân hàng</h4>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <i data-feather="x"></i>
                                 </button>
@@ -126,7 +123,7 @@ View::$activeItem = 'wallet';
                                 <div class="modal-body">
                                     <label>Tài khoản ngân hàng </label>
                                     <div class="form-group">
-                                        <input type="text" id="re-mahang" name="matknh" class="form-control" placeholder=" tài khaorn ngân gàng">
+                                        <input type="text" id="re-mahang" name="matknh" class="form-control" placeholder=" Tài khoản ngân hàng">
                                     </div>
                                     <label for="re-fullname">Tên ngân hàng hàng: </label>
                                     <div class="form-group">
@@ -154,7 +151,7 @@ View::$activeItem = 'wallet';
                 <div class="modal fade text-left" id="nap-modal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                         <div class="modal-content">
-                            <div class="modal-header" >
+                            <div class="modal-header">
                                 <h4 class="modal-title">Nạp tiền</h4>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <i data-feather="x"></i>
@@ -188,7 +185,7 @@ View::$activeItem = 'wallet';
                 <div class="modal fade text-left" id="rut-modal" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                         <div class="modal-content">
-                            <div class="modal-header" >
+                            <div class="modal-header">
                                 <h4 class="modal-title">Rút tiền</h4>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <i data-feather="x"></i>
@@ -222,18 +219,20 @@ View::$activeItem = 'wallet';
             </div>
         </div>
     </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
-    <script src="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.min.js') ?>"></script>
-    <script src="<?= View::assets('js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script src="<?= View::assets('js/main.js') ?>"></script>
     <script src="<?= View::assets('js/changepass.js') ?>"></script>
     <script src="<?= View::assets('js/menu.js') ?>"></script>
     <script src="<?= View::assets('js/api.js') ?>"></script>
+    <script src="<?= View::assets('js/html/flight.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+    <script src="<?= View::assets('vendors/boostrap/bootstrap.min.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(function() {
-            $.post(`http://localhost/Software-Technology/wallet/readPoint`, function(response) {
+            $.post(`<?= Config::get('URL') ?>wallet/readPoint`, function(response) {
                 if (response) {
                     $('#diem').text(response.diem);
                     $('#diemNew').text(response.diemmoi);
@@ -241,7 +240,7 @@ View::$activeItem = 'wallet';
                     $('#rankNew').text(response.rankNew);
                 }
             });
-            $.post(`http://localhost/Software-Technology/wallet/checkConnection`, function(response) {
+            $.post(`<?= Config::get('URL') ?>wallet/checkConnection`, function(response) {
                 if (response.thanhcong) {
                     data = response.data;
                     $('#vi_thanh_toan').removeClass('d-none');
@@ -249,7 +248,7 @@ View::$activeItem = 'wallet';
                     $('#lk').addClass('d-none');
                 }
             });
-            $('#rut').click(function(){
+            $('#rut').click(function() {
                 $("#rut-modal").modal('toggle');
                 $("form[name='rut-form']").validate({
                     ules: {
@@ -270,42 +269,42 @@ View::$activeItem = 'wallet';
                     },
                     submitHandler: function(form, event) {
                         event.preventDefault();
-                            // lấy dữ liệu từ form
+                        // lấy dữ liệu từ form
 
-                            const data = Object.fromEntries(new FormData(form).entries());
-                            $.post(`http://localhost/Software-Technology/wallet/withDraw`, data, function(response) {
-                                console.log(response);
-                                if (response.thanhcong) {
-                                    currentPage = 1;
-                                    Toastify({
-                                        text: "Rút Thành Công",
-                                        duration: 1000,
-                                        close: true,
-                                        gravity: "top",
-                                        position: "center",
-                                        backgroundColor: "#4fbe87",
-                                    }).showToast();
-                                    setTimeout(function() {
-                                        window.location = "http://localhost/Software-Technology/wallet/wallet";
-                                    }, 1000)
-                                } else {
-                                    Toastify({
-                                        text: "Rút Thất Bại",
-                                        duration: 1000,
-                                        close: true,
-                                        gravity: "top",
-                                        position: "center",
-                                        backgroundColor: "#FF6A6A",
-                                    }).showToast();
-                                }
+                        const data = Object.fromEntries(new FormData(form).entries());
+                        $.post(`<?= Config::get('URL') ?>wallet/withDraw`, data, function(response) {
+                            console.log(response);
+                            if (response.thanhcong) {
+                                currentPage = 1;
+                                Toastify({
+                                    text: "Rút Thành Công",
+                                    duration: 1000,
+                                    close: true,
+                                    gravity: "top",
+                                    position: "center",
+                                    backgroundColor: "#4fbe87",
+                                }).showToast();
+                                setTimeout(function() {
+                                    window.location = "<?= Config::get('URL') ?>wallet/wallet";
+                                }, 1000)
+                            } else {
+                                Toastify({
+                                    text: "Rút Thất Bại",
+                                    duration: 1000,
+                                    close: true,
+                                    gravity: "top",
+                                    position: "center",
+                                    backgroundColor: "#FF6A6A",
+                                }).showToast();
+                            }
 
-                                // Đóng modal
-                                $("#rut-modal").modal('toggle')
+                            // Đóng modal
+                            $("#rut-modal").modal('toggle')
                         });
                     }
                 })
             });
-            $('#nap').click(function(){
+            $('#nap').click(function() {
                 $("#nap-modal").modal('toggle');
                 $("form[name='nap-form']").validate({
                     ules: {
@@ -326,37 +325,37 @@ View::$activeItem = 'wallet';
                     },
                     submitHandler: function(form, event) {
                         event.preventDefault();
-                            // lấy dữ liệu từ form
+                        // lấy dữ liệu từ form
 
-                            const data = Object.fromEntries(new FormData(form).entries());
-                            $.post(`http://localhost/Software-Technology/wallet/topUp`, data, function(response) {
-                                console.log(response);
-                                if (response.thanhcong) {
-                                    currentPage = 1;
-                                    Toastify({
-                                        text: "Nạp Thành Công",
-                                        duration: 1000,
-                                        close: true,
-                                        gravity: "top",
-                                        position: "center",
-                                        backgroundColor: "#4fbe87",
-                                    }).showToast();
-                                    setTimeout(function() {
-                                        window.location = "http://localhost/Software-Technology/wallet/wallet";
-                                    }, 1000)
-                                } else {
-                                    Toastify({
-                                        text: "Nạp Thất Bại",
-                                        duration: 1000,
-                                        close: true,
-                                        gravity: "top",
-                                        position: "center",
-                                        backgroundColor: "#FF6A6A",
-                                    }).showToast();
-                                }
+                        const data = Object.fromEntries(new FormData(form).entries());
+                        $.post(`<?= Config::get('URL') ?>wallet/topUp`, data, function(response) {
+                            console.log(response);
+                            if (response.thanhcong) {
+                                currentPage = 1;
+                                Toastify({
+                                    text: "Nạp Thành Công",
+                                    duration: 1000,
+                                    close: true,
+                                    gravity: "top",
+                                    position: "center",
+                                    backgroundColor: "#4fbe87",
+                                }).showToast();
+                                setTimeout(function() {
+                                    window.location = "<?= Config::get('URL') ?>wallet/wallet";
+                                }, 1000)
+                            } else {
+                                Toastify({
+                                    text: "Nạp Thất Bại",
+                                    duration: 1000,
+                                    close: true,
+                                    gravity: "top",
+                                    position: "center",
+                                    backgroundColor: "#FF6A6A",
+                                }).showToast();
+                            }
 
-                                // Đóng modal
-                                $("#nap-modal").modal('toggle')
+                            // Đóng modal
+                            $("#nap-modal").modal('toggle')
                         });
                     }
                 })
@@ -389,37 +388,37 @@ View::$activeItem = 'wallet';
                     },
                     submitHandler: function(form, event) {
                         event.preventDefault();
-                            // lấy dữ liệu từ form
+                        // lấy dữ liệu từ form
 
-                            const data = Object.fromEntries(new FormData(form).entries());
-                            $.post(`http://localhost/Software-Technology/wallet/bankConnection`, data, function(response) {
-                                
-                                if (response.thanhcong) {
-                                    currentPage = 1;
-                                    Toastify({
-                                        text: "Liên kết Thành Công",
-                                        duration: 1000,
-                                        close: true,
-                                        gravity: "top",
-                                        position: "center",
-                                        backgroundColor: "#4fbe87",
-                                    }).showToast();
-                                    setTimeout(function() {
-                                        window.location = "http://localhost/Software-Technology/wallet/wallet";
-                                    }, 1000)
-                                } else {
-                                    Toastify({
-                                        text: "Liên kết Thất Bại",
-                                        duration: 1000,
-                                        close: true,
-                                        gravity: "top",
-                                        position: "center",
-                                        backgroundColor: "#FF6A6A",
-                                    }).showToast();
-                                }
+                        const data = Object.fromEntries(new FormData(form).entries());
+                        $.post(`<?= Config::get('URL') ?>wallet/bankConnection`, data, function(response) {
 
-                                // Đóng modal
-                                $("#repair-rank-modal").modal('toggle')
+                            if (response.thanhcong) {
+                                currentPage = 1;
+                                Toastify({
+                                    text: "Liên kết Thành Công",
+                                    duration: 1000,
+                                    close: true,
+                                    gravity: "top",
+                                    position: "center",
+                                    backgroundColor: "#4fbe87",
+                                }).showToast();
+                                setTimeout(function() {
+                                    window.location = "<?= Config::get('URL') ?>wallet/wallet";
+                                }, 1000)
+                            } else {
+                                Toastify({
+                                    text: "Liên kết Thất Bại",
+                                    duration: 1000,
+                                    close: true,
+                                    gravity: "top",
+                                    position: "center",
+                                    backgroundColor: "#FF6A6A",
+                                }).showToast();
+                            }
+
+                            // Đóng modal
+                            $("#repair-rank-modal").modal('toggle')
                         });
                     }
                 })

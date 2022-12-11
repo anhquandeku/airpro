@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'sale';
 
@@ -11,7 +12,7 @@ View::$activeItem = 'sale';
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
+    <title>AirPro</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
@@ -127,19 +128,21 @@ View::$activeItem = 'sale';
         </div>
 
     </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
-    <script src="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.min.js') ?>"></script>
-    <script src="<?= View::assets('js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script src="<?= View::assets('js/main.js') ?>"></script>
     <script src="<?= View::assets('js/changepass.js') ?>"></script>
     <script src="<?= View::assets('js/menu.js') ?>"></script>
     <script src="<?= View::assets('js/api.js') ?>"></script>
+    <script src="<?= View::assets('js/html/flight.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+    <script src="<?= View::assets('vendors/boostrap/bootstrap.min.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let diadiemss;
         $(function() {
-            $.post(`http://localhost/Software-Technology/userticket/getAirports`, function(response) {
+            $.post(`<?= Config::get('URL')?>userticket/getAirports`, function(response) {
                 if (response.thanhcong) {
                     diadiems = response.data;
                     diadiems.forEach(data => {
@@ -149,15 +152,15 @@ View::$activeItem = 'sale';
                     });
                 }
             });
-            $('#khuhoi').click(function(){
-                if($('#khuhoi').is(":checked")){
+            $('#khuhoi').click(function() {
+                if ($('#khuhoi').is(":checked")) {
                     $('#ngayve').removeClass("d-none");
-                } else{
+                } else {
                     $('#ngayve').addClass("d-none");
                 }
             });
-            $('#gia').change(function(){
-                giatien = ('#gia').val()*10000 + " VNĐ";
+            $('#gia').change(function() {
+                giatien = ('#gia').val() * 10000 + " VNĐ";
                 $('#giatien').text(giatien);
             });
             //kietm tra quyen
@@ -166,36 +169,36 @@ View::$activeItem = 'sale';
                     ngaydi: {
                         required: true,
                     },
-                    nguoilon:{
+                    nguoilon: {
                         require: true,
                         number: true,
-                        min:1
+                        min: 1
                     },
-                    treem:{
+                    treem: {
                         number: true,
-                        min:0
+                        min: 0
                     },
                     embe: {
                         number: true,
-                        min:0
+                        min: 0
                     }
                 },
                 messages: {
                     password: {
                         required: "Vui lòng chọn ngày đi",
                     },
-                    nguoilon:{
-                        required:"Vui lòng chọn số người lớn",
+                    nguoilon: {
+                        required: "Vui lòng chọn số người lớn",
                         number: "Phải là số",
-                        min:"Lớn hơn 0"
+                        min: "Lớn hơn 0"
                     },
-                    treem:{
+                    treem: {
                         number: "Phải là số",
-                        min:"Lớn hơn 0"
+                        min: "Lớn hơn 0"
                     },
                     embe: {
                         number: "Phải là số",
-                        min:"Lớn hơn 0"  
+                        min: "Lớn hơn 0"
                     }
                 },
                 submitHandler: function(form, event) {
@@ -203,7 +206,7 @@ View::$activeItem = 'sale';
                     // lấy dữ liệu từ form
                     const data = Object.fromEntries(new FormData(form).entries());
 
-                    $.post(`http://localhost/Software-Technology/userticket/getList`, data, function(response) {
+                    $.post(`<?= Config::get('URL')?>userticket/getList`, data, function(response) {
                         if (response.thanhcong) {
                             currentPage = 1;
                             layDSVe();

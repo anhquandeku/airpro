@@ -6,7 +6,7 @@ use App\Core\Auth;
 use App\Core\Cookie;
 use App\Core\Controller;
 use App\Core\Request;
-use App\Model\StatisticsModel;
+use App\Model\StatictisModel;
 
 class StatisticsController extends Controller
 {
@@ -15,19 +15,19 @@ class StatisticsController extends Controller
         parent::__construct();
     }
 
-    public function statistics()
+    public function index()
     {
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN12");
-        $this->View->render('statistics/statistics');
+      //  Auth::ktraquyen("CN12");
+        $this->View->render('statistics/index');
     }
 
     public function statisticByDay(){
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN12");
+       // Auth::ktraquyen("CN12");
         $ngaybd = Request::post('ngaybd');
         $ngaykt = Request::post('ngaykt');
-        $kq = StatisticsModel::statisticByDay($ngaybd,$ngaykt);
+        $kq = StatictisModel::statisticByDay($ngaybd,$ngaykt);
         if($kq == null ){
             $response['thanhcong'] = false;
         } else{   
@@ -39,10 +39,10 @@ class StatisticsController extends Controller
 
     public function statisticByMonth(){
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN12");
+       // Auth::ktraquyen("CN12");
         $thangbd = Request::post('thangbd');
         $thangkt = Request::post('thangkt');
-        $kq = StatisticsModel::statisticByMonth($thangbd,$thangkt);
+        $kq = StatictisModel::statisticByMonth($thangbd,$thangkt);
         if($kq == null ){
             $response['thanhcong'] = false;
         } else{   
@@ -54,10 +54,10 @@ class StatisticsController extends Controller
 
     public function statisticByYear(){
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN12");
+      //  Auth::ktraquyen("CN12");
         $nambd = Request::post('nambd');
         $namkt = Request::post('namkt');
-        $kq = StatisticsModel::statisticByYear($nambd,$namkt);
+        $kq = StatictisModel::statisticByYear($nambd,$namkt);
         if($kq == null ){
             $response['thanhcong'] = false;
         } else{   

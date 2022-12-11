@@ -15,11 +15,11 @@ class PlaneController extends Controller
         parent::__construct();
     }
 
-    public function plane()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
-        $this->View->render('plane/plane');
+        $this->View->render('plane/index');
     }
     
     public function checkValidPlane()

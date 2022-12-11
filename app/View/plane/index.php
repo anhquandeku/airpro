@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'plane';
 
@@ -9,21 +10,18 @@ View::$activeItem = 'plane';
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+<meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
-
+    <title>AirPro</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="<?= View::assets('css/bootstrap.css') ?>" />
-
-    <link rel="stylesheet" href="<?= View::assets('vendors/toastify/toastify.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/bootstrap-icons/bootstrap-icons.css') ?>" />
     <link rel="stylesheet" href="<?= View::assets('css/app.css') ?>" />
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon" />
     <link rel="stylesheet" href="<?= View::assets('css/quan.css') ?>" />
+    <link rel="stylesheet" href="<?= View::assets('css/global.css') ?>" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -240,15 +238,17 @@ View::$activeItem = 'plane';
             </div>
         </div>
     </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
-    <script src="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.min.js') ?>"></script>
-    <script src="<?= View::assets('js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script src="<?= View::assets('js/main.js') ?>"></script>
     <script src="<?= View::assets('js/changepass.js') ?>"></script>
     <script src="<?= View::assets('js/menu.js') ?>"></script>
     <script src="<?= View::assets('js/api.js') ?>"></script>
+    <script src="<?= View::assets('js/html/flight.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+    <script src="<?= View::assets('vendors/boostrap/bootstrap.min.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     let currentPage = 1;
     let checkedRows = [];
@@ -256,7 +256,7 @@ View::$activeItem = 'plane';
     $(function() {
         layDSMayBayAjax();
 
-        $.post(`http://localhost/Software-Technology/plane/getNameAirlines`, function(response) {
+        $.post(`<?= Config::get('URL')?>plane/getNameAirlines`, function(response) {
             if (response.thanhcong) {
                 hang = response.data;
                 hang.forEach(data => {
@@ -274,7 +274,7 @@ View::$activeItem = 'plane';
                 sohieu: {
                     required: true,
                     remote: {
-                        url: "http://localhost/Software-Technology/plane/checkValidPlane",
+                        url: "<?= Config::get('URL')?>plane/checkValidPlane",
                         type: "POST",
                     }
                 },
@@ -301,7 +301,7 @@ View::$activeItem = 'plane';
                 // lấy dữ liệu từ form
                 const data = Object.fromEntries(new FormData(form).entries());
                 console.log(data);
-                $.post(`http://localhost/Software-Technology/plane/create`, data, function(
+                $.post(`<?= Config::get('URL')?>plane/create`, data, function(
                     response) {
                     $("#add-plane-modal").modal('toggle')
                     if (response.thanhcong) {
@@ -355,7 +355,7 @@ View::$activeItem = 'plane';
     function layDSMayBayAjax() {
         let search = $('#cars-search option').filter(':selected').val();
         console.log('/' + search + "/");
-        $.get(`http://localhost/Software-Technology/plane/getPlane?rowsPerPage=10&page=${currentPage}&search=${$("#search-plane-text").val()}&search2=${search}`,
+        $.get(`<?= Config::get('URL')?>plane/getPlane?rowsPerPage=10&page=${currentPage}&search=${$("#search-plane-text").val()}&search2=${search}`,
             function(response) {
                 const table1 = $('#table1 > tbody');
                 table1.empty();
@@ -440,7 +440,7 @@ View::$activeItem = 'plane';
             sohieu: params
         };
 
-        $.post(`http://localhost/Software-Technology/plane/findOneBySoHieu`, data, function(response) {
+        $.post(`<?= Config::get('URL')?>plane/findOneBySoHieu`, data, function(response) {
             if (response.thanhcong) {
                 $('#upsohieu').val(response.so_hieu_may_bay);
                 $("#re-cars-hang").val(response.ma_hang_hang_khong).prop('selected', true);
@@ -478,7 +478,7 @@ View::$activeItem = 'plane';
 
                     const data = Object.fromEntries(new FormData(form).entries());
                     data['upsohieu'] = $('#upsohieu').val();
-                    $.post(`http://localhost/Software-Technology/plane/update`, data, function(
+                    $.post(`<?= Config::get('URL')?>plane/update`, data, function(
                         response) {
                         $("#update-plane-modal").modal('toggle')
                         if (response.thanhcong) {
@@ -517,7 +517,7 @@ View::$activeItem = 'plane';
         $("#question-plane-modal").modal('toggle');
         $('#thuchien').off('click');
         $("#thuchien").click(function() {
-            $.post(`http://localhost/Software-Technology/plane/delete`, data, function(response) {
+            $.post(`<?= Config::get('URL')?>plane/delete`, data, function(response) {
                 if (response.thanhcong) {
                     Toastify({
                         text: "Xóa Thành Công",
@@ -558,7 +558,7 @@ View::$activeItem = 'plane';
             let data = {
                 sohieus: JSON.stringify(datas)
             };
-            $.post(`http://localhost/Software-Technology/plane/deletes`, data, function(response) {
+            $.post(`<?= Config::get('URL')?>plane/deletes`, data, function(response) {
                 if (response.thanhcong) {
                     Toastify({
                         text: "Xóa Thành Công",

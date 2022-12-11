@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'staff';
 
@@ -9,20 +10,17 @@ View::$activeItem = 'staff';
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AirPro</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="<?= View::assets('css/bootstrap.css') ?>" />
-
-    <link rel="stylesheet" href="<?= View::assets('vendors/toastify/toastify.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/bootstrap-icons/bootstrap-icons.css') ?>" />
     <link rel="stylesheet" href="<?= View::assets('css/app.css') ?>" />
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon" />
     <link rel="stylesheet" href="<?= View::assets('css/quan.css') ?>" />
+    <link rel="stylesheet" href="<?= View::assets('css/global.css') ?>" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -343,15 +341,17 @@ View::$activeItem = 'staff';
 
         </div>
     </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
-    <script src="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.min.js') ?>"></script>
-    <script src="<?= View::assets('js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script src="<?= View::assets('js/main.js') ?>"></script>
     <script src="<?= View::assets('js/changepass.js') ?>"></script>
     <script src="<?= View::assets('js/menu.js') ?>"></script>
     <script src="<?= View::assets('js/api.js') ?>"></script>
+    <script src="<?= View::assets('js/html/flight.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+    <script src="<?= View::assets('vendors/boostrap/bootstrap.min.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         let currentPage = 1
@@ -360,7 +360,7 @@ View::$activeItem = 'staff';
         // on ready
         $(function() {
             layDSListStaffAjax();
-            // $.post(`http://localhost/Software-Technology/quyen/getQuyens`, function(response) {
+            // $.post(`<?= Config::get('URL')?>quyen/getQuyens`, function(response) {
             //     if (response.thanhcong) {
             //         quyens = response.data;
             //         quyens.forEach(data => {
@@ -427,7 +427,7 @@ View::$activeItem = 'staff';
                        event.preventDefault();
                         // lấy dữ liệu từ form
                         const data = Object.fromEntries(new FormData(form).entries());
-                        $.post(`http://localhost/Software-Technology/staff/create`, data, function(response) {
+                        $.post(`<?= Config::get('URL')?>staff/create`, data, function(response) {
                             if (response.thanhcong) {
                                 currentPage = 1;
                                 layDSListStaffAjax();
@@ -495,7 +495,7 @@ View::$activeItem = 'staff';
         },200));
 
         function layDSListStaffAjax() {
-            $.get(`http://localhost/Software-Technology/staff/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
+            $.get(`<?= Config::get('URL')?>staff/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -587,7 +587,7 @@ View::$activeItem = 'staff';
         }
 
         function layDSStaffSearchNangCao(search, search2) {
-            $.get(`http://localhost/Software-Technology/staff/advancedSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
+            $.get(`<?= Config::get('URL')?>staff/advancedSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -682,7 +682,7 @@ View::$activeItem = 'staff';
             let data = {
                 manv: params    
             };
-            $.post('http://localhost/Software-Technology/staff/getStaff', data, function(response) {
+            $.post('<?= Config::get('URL')?>staff/getStaff', data, function(response) {
                 if (response.thanhcong) {
                     $("#view-manhanvien").val(response.ma_nv); 
                     $("#view-mataikhoannhanvien").val(response.ma_tk);   
@@ -704,7 +704,7 @@ View::$activeItem = 'staff';
                 manv: params
             };
 
-            $.post(`http://localhost/Software-Technology/staff/getStaff`, data, function(response) {
+            $.post(`<?= Config::get('URL')?>staff/getStaff`, data, function(response) {
                 if (response.thanhcong) {
                     $("#manhanvien1").val(response.ma_nv); 
                     $("#mataikhoan1").val(response.ma_tk);   
@@ -777,7 +777,7 @@ View::$activeItem = 'staff';
 
                         const data = Object.fromEntries(new FormData(form).entries());
                         data['manhanvien1'] = $('#manhanvien1').val();
-                        $.post(`http://localhost/Software-Technology/staff/update`, data, function(response) {
+                        $.post(`<?= Config::get('URL')?>staff/update`, data, function(response) {
                             if (response.thanhcong) {
                                 currentPage = 1;
                                 layDSListStaffAjax();
@@ -817,7 +817,7 @@ View::$activeItem = 'staff';
             $("#question-staff-modal").modal('toggle');
             $('#thuchien').off('click');
             $("#thuchien").click(function() {
-                $.post(`http://localhost/Software-Technology/staff/delete`, data, function(response) {
+                $.post(`<?= Config::get('URL')?>staff/delete`, data, function(response) {
                     if (response.thanhcong) {
                         Toastify({
                             text: "Xóa Thành Công",
@@ -858,7 +858,7 @@ View::$activeItem = 'staff';
                 let data = {
                     manvs: JSON.stringify(datas)
                 };
-                $.post(`http://localhost/Software-Technology/staff/deletes`, data, function(response) {
+                $.post(`<?= Config::get('URL')?>staff/deletes`, data, function(response) {
                     if (response.thanhcong) {
                         Toastify({
                             text: "Xóa Thành Công",

@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'ticket';
 
@@ -11,7 +12,7 @@ View::$activeItem = 'ticket';
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
+    <title>AirPro</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
@@ -66,7 +67,7 @@ View::$activeItem = 'ticket';
                             <div class="col-12 col-md-5 order-md-2 order-first">
 
                                 <div class=" loat-start float-lg-end mb-3">
-                                <button id='open-repair-ticket-btn' class="btn btn-dark">
+                                    <button id='open-repair-ticket-btn' class="btn btn-dark">
                                         <i class="bi bi-tools"></i> Sửa vé máy bay
                                     </button>
                                     <button id='open-add-ticket-btn' class="btn btn-primary">
@@ -119,9 +120,9 @@ View::$activeItem = 'ticket';
                                 <form name="add-ticket-form" action="/" method="POST">
                                     <div class="modal-header">
                                         <div>
-                                            
+
                                         </div>
-                                        
+
                                     </div>
                                     <div class="modal-body">
                                         <div class="table-responsive">
@@ -140,7 +141,7 @@ View::$activeItem = 'ticket';
                                                         <th>Tác vụ</th>
                                                     </tr>
                                                 </thead>
-                                                
+
                                                 <tbody>
                                                 </tbody>
                                             </table>
@@ -156,7 +157,7 @@ View::$activeItem = 'ticket';
                                     <i class="bx bx-x d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block">Đóng</span>
                                 </button>
-                                
+
                             </div>
                             </form>
                         </div>
@@ -174,7 +175,7 @@ View::$activeItem = 'ticket';
                             </div>
                             <div class="modal-body">
                                 <form name="add-ticket1-form" action="/" method="POST">
-                                    
+
                                     <div class="modal-body">
                                         <label for="machuyenbay1">Mã chuyến bay: </label>
                                         <div class="form-group">
@@ -259,12 +260,12 @@ View::$activeItem = 'ticket';
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <form name="repair-ticket-form" action="/" method="POST">
+                                <form name="repair-ticket-form" action="/" method="POST">
                                     <div class="modal-header">
                                         <div>
-                                            
+
                                         </div>
-                                        
+
                                     </div>
                                     <div class="modal-body">
                                         <div class="table-responsive">
@@ -283,7 +284,7 @@ View::$activeItem = 'ticket';
                                                         <th>Tác vụ</th>
                                                     </tr>
                                                 </thead>
-                                                
+
                                                 <tbody>
                                                 </tbody>
                                             </table>
@@ -293,16 +294,16 @@ View::$activeItem = 'ticket';
                                             </nav>
                                         </div>
                                     </div>
-                                
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                        <i class="bx bx-x d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Đóng</span>
-                                    </button>
-                                    
-                                </div>
-                                </form>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Đóng</span>
+                                </button>
+
+                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -318,9 +319,9 @@ View::$activeItem = 'ticket';
                             </div>
                             <div class="modal-body">
                                 <form name="repair-ticket1-form" action="/" method="POST">
-                                    
+
                                     <div class="modal-body">
-                                    <label for="re-machuyenbay1">Mã chuyến bay: </label>
+                                        <label for="re-machuyenbay1">Mã chuyến bay: </label>
                                         <div class="form-group">
                                             <input type="text" id="re-machuyenbay1" readonly="readonly" name="suamachuyenbay1" placeholder="" class="form-control">
                                         </div>
@@ -521,26 +522,29 @@ View::$activeItem = 'ticket';
             </div>
         </div>
     </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
-    <script src="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.min.js') ?>"></script>
-    <script src="<?= View::assets('js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script src="<?= View::assets('js/main.js') ?>"></script>
     <script src="<?= View::assets('js/changepass.js') ?>"></script>
     <script src="<?= View::assets('js/menu.js') ?>"></script>
     <script src="<?= View::assets('js/api.js') ?>"></script>
+    <script src="<?= View::assets('js/html/flight.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+    <script src="<?= View::assets('vendors/boostrap/bootstrap.min.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         let currentPage = 1
         let checkedRows = [];
         let hangkhs
         // on ready
         $(function() {
-            
+
             layDSTicketAjax();
             layDSTicketAjax1();
             layDSTicketAjax2();
-            // $.post(`http://localhost/Software-Technology/quyen/getQuyens`, function(response) {
+            // $.post(`<?= Config::get('URL') ?>quyen/getQuyens`, function(response) {
             //     if (response.thanhcong) {
             //         quyens = response.data;
             //         quyens.forEach(data => {
@@ -553,13 +557,13 @@ View::$activeItem = 'ticket';
             //     }
             // });
             //kietm tra quyen
-            
-            $.post(`http://localhost/Software-Technology/Ticket/setTrangThai`, function(response) {
-                if(response.thanhcong) {
+
+            $.post(`<?= Config::get('URL') ?>Ticket/setTrangThai`, function(response) {
+                if (response.thanhcong) {
                     layDSTicketAjax();
                     layDSTicketAjax1();
                     layDSTicketAjax2();
-                } 
+                }
             });
 
             // Đặt sự kiện validate cho modal add user
@@ -576,25 +580,25 @@ View::$activeItem = 'ticket';
                     },
                     giagocthuonggia: {
                         required: true,
-                        number:true,
-                        min:99999,
+                        number: true,
+                        min: 99999,
                     },
 
                     giathuethuonggia: {
                         required: true,
                         number: true,
-                        min:999999,
+                        min: 999999,
                     },
                     giagocthuong: {
                         required: true,
                         number: true,
-                        min:49999,
+                        min: 49999,
 
                     },
                     giathuethuong: {
                         required: true,
                         number: true,
-                        min:699999,
+                        min: 699999,
 
                     },
 
@@ -626,7 +630,7 @@ View::$activeItem = 'ticket';
                     // lấy dữ liệu từ form
                     const data = Object.fromEntries(new FormData(form).entries());
 
-                    $.post(`http://localhost/Software-Technology/ticket/create`, data, function(response) {
+                    $.post(`<?= Config::get('URL') ?>ticket/create`, data, function(response) {
                         console.log(response.thanhcong);
                         if (response.thanhcong) {
                             currentPage = 1;
@@ -663,17 +667,17 @@ View::$activeItem = 'ticket';
             })
 
         });
-        
+
         $("#open-add-ticket-btn").click(function() {
-            
+
             $("#add-ticket-modal").modal('toggle');
         });
         $("#open-repair-ticket-btn").click(function() {
-            
+
             $("#repair-ticket-modal").modal('toggle');
         });
 
-        
+
         function changePage(newPage) {
             currentPage = newPage;
             layDSTicketAjax();
@@ -694,10 +698,10 @@ View::$activeItem = 'ticket';
             let search = $('#cars-search option').filter(':selected').val();
             currentPage = 1;
             layDSTicketSearchNangCao($('#serch-ticket-text').val(), search);
-        },200));
+        }, 200));
 
         function layDSTicketAjax() {
-            $.get(`http://localhost/Software-Technology/ticket/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
+            $.get(`<?= Config::get('URL') ?>ticket/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -711,9 +715,9 @@ View::$activeItem = 'ticket';
                 $row = 0;
                 response.data.forEach(data => {
                     let disabled = "disabled btn icon icon-left btn-secondary";
-                
-                    let noidi="";
-                    let noiden="";
+
+                    let noidi = "";
+                    let noiden = "";
                     let s = 0;
                     response.sanbay.forEach(sanbay => {
                         if (sanbay.ma_san_bay == data.ma_san_bay_di) {
@@ -724,17 +728,17 @@ View::$activeItem = 'ticket';
                             noiden = sanbay.dia_diem;
                             s = s + 1;
                         }
-                        if(s==2) {
+                        if (s == 2) {
                             return true;
                         }
                     });
                     let tt = ""
-                    if(data.trang_thai==1) {
-                        tt="Chưa bán";
-                    } else if(data.trang_thai==2) {
-                        tt="Đã bán";
-                    } else if(data.trang_thai==3) {
-                        tt="Đã hết hạn";
+                    if (data.trang_thai == 1) {
+                        tt = "Chưa bán";
+                    } else if (data.trang_thai == 2) {
+                        tt = "Đã bán";
+                    } else if (data.trang_thai == 3) {
+                        tt = "Đã hết hạn";
                     }
                     if ($row % 2 == 0) {
 
@@ -799,7 +803,7 @@ View::$activeItem = 'ticket';
         }
         //-----------------------
         function layDSTicketAjax1() {
-            $.get(`http://localhost/Software-Technology/ticket/getList1?rowsPerPage=10&page=${currentPage}`, function(response) {
+            $.get(`<?= Config::get('URL') ?>ticket/getList1?rowsPerPage=10&page=${currentPage}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -813,9 +817,9 @@ View::$activeItem = 'ticket';
                 $row = 0;
                 response.data.forEach(data => {
                     let disabled = "disabled btn icon icon-left btn-secondary";
-                
-                    let noidi="";
-                    let noiden="";
+
+                    let noidi = "";
+                    let noiden = "";
                     let s = 0;
                     response.sanbay.forEach(sanbay => {
                         if (sanbay.ma_san_bay == data.ma_san_bay_di) {
@@ -826,13 +830,13 @@ View::$activeItem = 'ticket';
                             noiden = sanbay.dia_diem;
                             s = s + 1;
                         }
-                        if(s==2) {
+                        if (s == 2) {
                             return true;
                         }
                     });
                     let tt = "";
-                    if(data.trang_thai==1) {
-                        tt="Chưa có vé";
+                    if (data.trang_thai == 1) {
+                        tt = "Chưa có vé";
                     }
                     if ($row % 2 == 0) {
 
@@ -901,7 +905,7 @@ View::$activeItem = 'ticket';
         }
         //-----------------------
         function layDSTicketAjax2() {
-            $.get(`http://localhost/Software-Technology/ticket/getList2?rowsPerPage=10&page=${currentPage}`, function(response) {
+            $.get(`<?= Config::get('URL') ?>ticket/getList2?rowsPerPage=10&page=${currentPage}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -915,9 +919,9 @@ View::$activeItem = 'ticket';
                 $row = 0;
                 response.data.forEach(data => {
                     let disabled = "disabled btn icon icon-left btn-secondary";
-                
-                    let noidi="";
-                    let noiden="";
+
+                    let noidi = "";
+                    let noiden = "";
                     let s = 0;
                     response.sanbay.forEach(sanbay => {
                         if (sanbay.ma_san_bay == data.ma_san_bay_di) {
@@ -928,13 +932,13 @@ View::$activeItem = 'ticket';
                             noiden = sanbay.dia_diem;
                             s = s + 1;
                         }
-                        if(s==2) {
+                        if (s == 2) {
                             return true;
                         }
                     });
                     let tt = "";
-                    if(data.trang_thai==2) {
-                        tt="Đã có vé";
+                    if (data.trang_thai == 2) {
+                        tt = "Đã có vé";
                     }
                     if ($row % 2 == 0) {
 
@@ -1001,8 +1005,9 @@ View::$activeItem = 'ticket';
 
             });
         }
+
         function layDSTicketSearchNangCao(search, search2) {
-            $.get(`http://localhost/Software-Technology/ticket/getListSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
+            $.get(`<?= Config::get('URL') ?>ticket/getListSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -1016,9 +1021,9 @@ View::$activeItem = 'ticket';
                 $row = 0;
                 response.data.forEach(data => {
                     let disabled = "disabled btn icon icon-left btn-secondary";
-                    let noidi="";
+                    let noidi = "";
 
-                    let noiden="";
+                    let noiden = "";
                     let s = 0;
                     response.sanbay.forEach(sanbay => {
                         if (sanbay.ma_san_bay == data.ma_san_bay_di) {
@@ -1029,19 +1034,19 @@ View::$activeItem = 'ticket';
                             noiden = sanbay.dia_diem;
                             s = s + 1;
                         }
-                        if(s==2) {
+                        if (s == 2) {
                             return true;
                         }
                     });
                     let tt = ""
-                    if(data.trang_thai==1) {
-                        tt="Chưa bán";
-                    } else if(data.trang_thai==2) {
-                        tt="Đã bán";
-                    } else if(data.trang_thai==3) {
-                        tt="Đã hết hạn";
+                    if (data.trang_thai == 1) {
+                        tt = "Chưa bán";
+                    } else if (data.trang_thai == 2) {
+                        tt = "Đã bán";
+                    } else if (data.trang_thai == 3) {
+                        tt = "Đã hết hạn";
                     }
-                    
+
                     if ($row % 2 == 0) {
 
                         table1.append(`
@@ -1107,8 +1112,8 @@ View::$activeItem = 'ticket';
             let data = {
                 mav: params
             };
-            
-            $.post(`http://localhost/Software-Technology/ticket/viewTicket`, data, function(response) {
+
+            $.post(`<?= Config::get('URL') ?>ticket/viewTicket`, data, function(response) {
                 if (response.thanhcong) {
                     $("#view-ve").val(response.ve);
                     $("#view-hangkhong").val(response.hangkhong);
@@ -1133,7 +1138,7 @@ View::$activeItem = 'ticket';
                 macb: params
             };
             console.log(params);
-            $.post(`http://localhost/Software-Technology/ticket/viewTicket1`, data, function(response) {
+            $.post(`<?= Config::get('URL') ?>ticket/viewTicket1`, data, function(response) {
                 if (response.thanhcong) {
                     $("#machuyenbay1").val(response.chuyenbay);
                     $("#tenhang1").val(response.tenhang);
@@ -1155,7 +1160,7 @@ View::$activeItem = 'ticket';
         //     let data = {
         //         email: params
         //     };
-        //     $.post(`http://localhost/Software-Technology/user/resetPassword`, data, function(response) {
+        //     $.post(`<?= Config::get('URL') ?>user/resetPassword`, data, function(response) {
         //         if (response.thanhcong) {
 
         //             Toastify({
@@ -1186,7 +1191,7 @@ View::$activeItem = 'ticket';
                 macb: params
             };
 
-            $.post(`http://localhost/Software-Technology/ticket/viewTicket2`, data, function(response) {
+            $.post(`<?= Config::get('URL') ?>ticket/viewTicket2`, data, function(response) {
                 if (response.thanhcong) {
                     $("#re-machuyenbay1").val(response.chuyenbay);
                     $("#re-tenhang1").val(response.tenhang);
@@ -1204,14 +1209,14 @@ View::$activeItem = 'ticket';
                     $("#re-giathuethuonggia").val(response.giathuethuonggia);
                 }
             });
-            
+
             $("#repair-ticket1-modal").modal('toggle');
             //Sua form
             $("form[name='repair-ticket1-form']").validate({
                 rules: {
-                    
 
-                    
+
+
                     suamachuyenbay1: {
                         required: true,
                     },
@@ -1223,24 +1228,24 @@ View::$activeItem = 'ticket';
                     },
                     suagiagocthuonggia: {
                         required: true,
-                        number:true,
-                        min:99999,
+                        number: true,
+                        min: 99999,
                     },
                     suagiathuethuonggia: {
                         required: true,
                         number: true,
-                        min:999999,
+                        min: 999999,
                     },
                     suagiagocthuong: {
                         required: true,
                         number: true,
-                        min:49999,
+                        min: 49999,
 
                     },
                     suagiathuethuong: {
                         required: true,
                         number: true,
-                        min:699999,
+                        min: 699999,
 
                     },
 
@@ -1275,10 +1280,10 @@ View::$activeItem = 'ticket';
                     $('#thuchien').off('click')
                     $("#thuchien").click(function() {
                         // lấy dữ liệu từ form
-                        
+
                         const data = Object.fromEntries(new FormData(form).entries());
-                        
-                        $.post(`http://localhost/Software-Technology/ticket/update`, data, function(response) {
+
+                        $.post(`<?= Config::get('URL') ?>ticket/update`, data, function(response) {
                             if (response.thanhcong) {
                                 currentPage = 1;
                                 layDSTicketAjax();
@@ -1319,7 +1324,7 @@ View::$activeItem = 'ticket';
         //     $("#question-ticket-modal").modal('toggle');
         //     $('#thuchien').off('click');
         //     $("#thuchien").click(function() {
-        //         $.post(`http://localhost/Software-Technology/ticket/delete`, data, function(response) {
+        //         $.post(`<?= Config::get('URL') ?>ticket/delete`, data, function(response) {
         //             if (response.thanhcong) {
         //                 Toastify({
         //                     text: "Xóa Thành Công",
@@ -1361,7 +1366,7 @@ View::$activeItem = 'ticket';
         //         let data = {
         //             makh: JSON.stringify(datas)
         //         };
-        //         $.post(`http://localhost/Software-Technology/ticket/deletes`, data, function(response) {
+        //         $.post(`<?= Config::get('URL') ?>ticket/deletes`, data, function(response) {
         //             if (response.thanhcong) {
         //                 Toastify({
         //                     text: "Xóa Thành Công",

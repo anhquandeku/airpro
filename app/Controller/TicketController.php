@@ -15,18 +15,18 @@ class TicketController extends Controller
         parent::__construct();
     }
 
-    public function ticket()
+    public function index()
     {
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN18");
-        $this->View->render('ticket/ticket');
+        //Auth::ktraquyen("CN18");
+        $this->View->render('ticket/index');
     }
 
     
 
     public function create(){
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN18");
+       // Auth::ktraquyen("CN18");
         $macb = Request::post('machuyenbay1');
         $ghethuong = Request::post('ghethuong');
         $ghethuonggia = Request::post('ghethuonggia');
@@ -43,7 +43,7 @@ class TicketController extends Controller
 
     public function update(){
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN18");
+      //  Auth::ktraquyen("CN18");
         $macb = Request::post('suamachuyenbay1');
         $ghethuong = Request::post('suaghethuong');
         $ghethuonggia = Request::post('suaghethuonggia');
@@ -64,7 +64,7 @@ class TicketController extends Controller
 
     public function getList(){
         Auth::checkAuthentication(); // Ktra có đang đăng nhập hay chưa
-        Auth::ktraquyen("CN18");
+      //  Auth::ktraquyen("CN18");
         $search = Request::get('search');
         $page = Request::get('page', 1);
         $rowsPerPage = Request::get('rowsPerPage', 1);
@@ -73,7 +73,7 @@ class TicketController extends Controller
     }
     public function getList1(){
         Auth::checkAuthentication(); // Ktra có đang đăng nhập hay chưa
-        Auth::ktraquyen("CN18");
+      //  Auth::ktraquyen("CN18");
         $search = Request::get('search');
         $page = Request::get('page', 1);
         $rowsPerPage = Request::get('rowsPerPage', 10);
@@ -82,7 +82,7 @@ class TicketController extends Controller
     }
     public function getList2(){
         Auth::checkAuthentication(); // Ktra có đang đăng nhập hay chưa
-        Auth::ktraquyen("CN18");
+        //Auth::ktraquyen("CN18");
         $search = Request::get('search');
         $page = Request::get('page', 1);
         $rowsPerPage = Request::get('rowsPerPage', 10);
@@ -97,7 +97,7 @@ class TicketController extends Controller
     public function viewTicket()
     {
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN18");
+    //    Auth::ktraquyen("CN18");
         $mav = Request::post('mav');
         $kq = TicketModel::findOneByMaVe($mav);
         $kq1 = TicketModel::findOneBySanBay1($kq->ma_san_bay_di);
@@ -128,7 +128,7 @@ class TicketController extends Controller
     public function viewTicket1()
     {
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN18");
+       // Auth::ktraquyen("CN18");
         $macb = Request::post('macb');
         $kq = TicketModel::findOneByChuyenBay($macb);
         $kq1 = TicketModel::findOneBySanBay1($kq->ma_san_bay_di);
@@ -158,7 +158,7 @@ class TicketController extends Controller
     public function viewTicket2()
     {
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN18");
+      //  Auth::ktraquyen("CN18");
         $macb = Request::post('macb');
         $kq = TicketModel::findOneByChuyenBay2($macb);
         $kq1 = TicketModel::findOneBySanBay1($kq->ma_san_bay_di);
@@ -192,7 +192,7 @@ class TicketController extends Controller
     }
     public function getListSearch(){
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN18");
+        //Auth::ktraquyen("CN18");
         $search = Request::get('search');
         $search2 = Request::get('search2');
         $page = Request::get('page', 1);
@@ -203,7 +203,7 @@ class TicketController extends Controller
 
     public function setTrangThai(){
         Auth::checkAuthentication();
-        Auth::ktraquyen("CN18");
+       // Auth::ktraquyen("CN18");
         $data = TicketModel::setTrangThai();
         $response = ['thanhcong' => false];
         if($data == null){

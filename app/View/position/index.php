@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'position';
 
@@ -9,20 +10,17 @@ View::$activeItem = 'position';
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
-
+    <title>AirPro</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="<?= View::assets('css/bootstrap.css') ?>" />
-
-    <link rel="stylesheet" href="<?= View::assets('vendors/toastify/toastify.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/bootstrap-icons/bootstrap-icons.css') ?>" />
     <link rel="stylesheet" href="<?= View::assets('css/app.css') ?>" />
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon" />
     <link rel="stylesheet" href="<?= View::assets('css/quan.css') ?>" />
+    <link rel="stylesheet" href="<?= View::assets('css/global.css') ?>" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -233,13 +231,13 @@ View::$activeItem = 'position';
                                             <label>Tên chức vụ:</label>
                                             <input type="text" class="form-control" id="view-tenchucvu" disabled>
                                         </div>
-                                    </li>             
+                                    </li>
                                     <li class="list-group-item">
                                         <label>Chi Tiết:</label>
                                         <ul id="view-chucnang-list" class="list-unstyled mb-0">
 
                                         </ul>
-                                    </li>                  
+                                    </li>
                                 </ul>
                             </div>
                             <div class="modal-footer">
@@ -254,28 +252,31 @@ View::$activeItem = 'position';
 
                 <!-- FOOTER -->
                 <?php View::partial('footer')  ?>
+            </div>
         </div>
-    </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
-    <script src="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.min.js') ?>"></script>
-    <script src="<?= View::assets('js/bootstrap.bundle.min.js') ?>"></script>
-    <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
-    <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
-    <script src="<?= View::assets('js/main.js') ?>"></script>
-    <script src="<?= View::assets('js/changepass.js') ?>"></script>
-    <script src="<?= View::assets('js/menu.js') ?>"></script>
-    <script src="<?= View::assets('js/api.js') ?>"></script>
-    <script>
-        let currentPage = 1
-        let checkedRows = [];
-        let chucnangs
-        // on ready
-        $(function() {          
-            //kietm tra quyen
-            $.post(`http://localhost/Software-Technology/position/getChucNang`, function(response) {
-                chucnangs = response.data;
-                chucnangs.forEach(data => {
-                    let viewopt = '<li class="d-inline-block me-0 mb-1 w-50">\
+        <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
+        <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
+        <script src="<?= View::assets('js/main.js') ?>"></script>
+        <script src="<?= View::assets('js/changepass.js') ?>"></script>
+        <script src="<?= View::assets('js/menu.js') ?>"></script>
+        <script src="<?= View::assets('js/api.js') ?>"></script>
+        <script src="<?= View::assets('js/html/flight.js') ?>"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+        <script src="<?= View::assets('vendors/boostrap/bootstrap.min.js') ?>"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            let currentPage = 1
+            let checkedRows = [];
+            let chucnangs
+            // on ready
+            $(function() {
+                //kietm tra quyen
+                $.post(`<?= Config::get('URL') ?>position/getChucNang`, function(response) {
+                    chucnangs = response.data;
+                    chucnangs.forEach(data => {
+                        let viewopt = '<li class="d-inline-block me-0 mb-1 w-50">\
                                     <div class="form-check">\
                                         <div class="custom-control custom-checkbox">\
                                             <input type="checkbox" class="form-check-input form-check-success" name="' + data.ma_chuc_nang + '" id="view-' + data.ma_chuc_nang + '" disabled>\
@@ -283,7 +284,7 @@ View::$activeItem = 'position';
                                         </div>\
                                     </div>\
                                 </li>';
-                    let opt = '<li class="d-inline-block me-0 mb-1 w-50">\
+                        let opt = '<li class="d-inline-block me-0 mb-1 w-50">\
                                     <div class="form-check">\
                                         <div class="custom-control custom-checkbox">\
                                             <input type="checkbox" class="form-check-input form-check-success"  name="' + data.ma_chuc_nang + '" id="add-' + data.ma_chuc_nang + '" >\
@@ -291,7 +292,7 @@ View::$activeItem = 'position';
                                         </div>\
                                     </div>\
                                 </li>';
-                    let reopt = '<li class="d-inline-block me-0 mb-1 w-50">\
+                        let reopt = '<li class="d-inline-block me-0 mb-1 w-50">\
                                 <div class="form-check">\
                                     <div class="custom-control custom-checkbox">\
                                         <input type="checkbox" class="form-check-input form-check-success" name="' + data.ma_chuc_nang + '" id="re-' + data.ma_chuc_nang + '" >\
@@ -299,140 +300,140 @@ View::$activeItem = 'position';
                                     </div>\
                                 </div>\
                             </li>';
-                    $("#chucnang-list").append(opt);
-                    $("#re-chucnang-list").append(reopt);
-                    $("#view-chucnang-list").append(viewopt);
+                        $("#chucnang-list").append(opt);
+                        $("#re-chucnang-list").append(reopt);
+                        $("#view-chucnang-list").append(viewopt);
+                    });
                 });
-            });             
-            layDSChucVuAjax();
-            //Đặt sự kiện validate cho modal add position
-            $("form[name='add-position-form']").validate({
-                rules: {                   
-                    machucvu: {
-                        required: true,   
-                        remote: {
-                            url: "http://localhost/Software-Technology/position/checkValidMaChucVu",
-                            type: "POST",
-                        }                    
-                    },                  
-                    tenchucvu: {
-                        required: true,
+                layDSChucVuAjax();
+                //Đặt sự kiện validate cho modal add position
+                $("form[name='add-position-form']").validate({
+                    rules: {
+                        machucvu: {
+                            required: true,
+                            remote: {
+                                url: "<?= Config::get('URL') ?>position/checkValidMaChucVu",
+                                type: "POST",
+                            }
+                        },
+                        tenchucvu: {
+                            required: true,
+                        },
                     },
-                },
-                messages: {
-                    machucvu: {
-                        required: "Vui lòng nhập mã chức vụ",
+                    messages: {
+                        machucvu: {
+                            required: "Vui lòng nhập mã chức vụ",
+                        },
+                        tenchucvu: {
+                            required: "Vui lòng nhập tên chức vụ",
+                        },
                     },
-                    tenchucvu: {
-                        required: "Vui lòng nhập tên chức vụ",
-                    },                    
-                },
-                submitHandler: function(form, event) {
-                    event.preventDefault();
-                    // lấy dữ liệu từ form
-                    const tam = Object.fromEntries(new FormData(form).entries());
-                    chucnangs.forEach(cn => {
+                    submitHandler: function(form, event) {
+                        event.preventDefault();
+                        // lấy dữ liệu từ form
+                        const tam = Object.fromEntries(new FormData(form).entries());
+                        chucnangs.forEach(cn => {
                             if ($('#add-' + cn.ma_chuc_nang).prop("checked")) {
                                 tam[cn.ma_chuc_nang] = 1;
                             }
                         });
                         let chitiet = [];
                         Object.keys(tam).forEach(key => {
-                            if(key == 'machucvu' || key == 'tenchucvu'){
+                            if (key == 'machucvu' || key == 'tenchucvu') {
                                 return;
                             }
                             let temp = {
                                 ma_chuc_vu: tam['machucvu'],
-                                ma_chuc_nang: key,                                
+                                ma_chuc_nang: key,
                             }
                             chitiet.push(temp)
                         })
                         let data = {
-                            machucvu :tam['machucvu'],
-                            tenchucvu :tam['tenchucvu'],
-                            chitiets : JSON.stringify(chitiet)
+                            machucvu: tam['machucvu'],
+                            tenchucvu: tam['tenchucvu'],
+                            chitiets: JSON.stringify(chitiet)
                         }
-                    $.post(`http://localhost/Software-Technology/position/create`, data, function(response) {
-                        if (response.thanhcong) {
-                            currentPage = 1;
-                            layDSChucVuAjax();
-                            Toastify({
-                                text: "Thêm Thành Công",
-                                duration: 1000,
-                                close: true,
-                                gravity: "top",
-                                position: "center",
-                                backgroundColor: "#4fbe87",
-                            }).showToast();
-                        } else {
-                            Toastify({
-                                text: "Thêm Thất Bại",
-                                duration: 1000,
-                                close: true,
-                                gravity: "top",
-                                position: "center",
-                                backgroundColor: "#FF6A6A",
-                            }).showToast();
-                        }
+                        $.post(`<?= Config::get('URL') ?>position/create`, data, function(response) {
+                            if (response.thanhcong) {
+                                currentPage = 1;
+                                layDSChucVuAjax();
+                                Toastify({
+                                    text: "Thêm Thành Công",
+                                    duration: 1000,
+                                    close: true,
+                                    gravity: "top",
+                                    position: "center",
+                                    backgroundColor: "#4fbe87",
+                                }).showToast();
+                            } else {
+                                Toastify({
+                                    text: "Thêm Thất Bại",
+                                    duration: 1000,
+                                    close: true,
+                                    gravity: "top",
+                                    position: "center",
+                                    backgroundColor: "#FF6A6A",
+                                }).showToast();
+                            }
 
-                        // Đóng modal
-                        $("#add-position-modal").modal('toggle')
-                    });
-                    $('#machucvu').val("");
-                    $('#tenchucvu').val("");
-                }
-            })
+                            // Đóng modal
+                            $("#add-position-modal").modal('toggle')
+                        });
+                        $('#machucvu').val("");
+                        $('#tenchucvu').val("");
+                    }
+                })
 
-        });
+            });
 
-        $("#open-add-position-btn").click(function() {
-            $('#machucvu').val("");
-            $('#tenchucvu').val("");
-            $("#add-position-modal").modal('toggle')
-        });
+            $("#open-add-position-btn").click(function() {
+                $('#machucvu').val("");
+                $('#tenchucvu').val("");
+                $("#add-position-modal").modal('toggle')
+            });
 
 
-        function changePage(newPage) {
-            currentPage = newPage;
-            layDSChucVuAjax();
-        }
+            function changePage(newPage) {
+                currentPage = newPage;
+                layDSChucVuAjax();
+            }
 
-        function changePageSearchNangCao(newPage, search, search2) {
-            currentPage = newPage;
-            layDSChucVuSearchNangCao(search, search2);
-        }
+            function changePageSearchNangCao(newPage, search, search2) {
+                currentPage = newPage;
+                layDSChucVuSearchNangCao(search, search2);
+            }
 
-        $('#cars-search').change(function() {
-            let search = $('#cars-search option').filter(':selected').val();
-            currentPage = 1;
-            layDSChucVuSearchNangCao($('#serch-position-text').val(), search);
-        });
+            $('#cars-search').change(function() {
+                let search = $('#cars-search option').filter(':selected').val();
+                currentPage = 1;
+                layDSChucVuSearchNangCao($('#serch-position-text').val(), search);
+            });
 
-        $("#search-position-form").keyup(debounce(function() {
-            let search = $('#cars-search').val();
-            currentPage = 1;
-            layDSChucVuSearchNangCao($('#serch-position-text').val(), search);
-        },200));
+            $("#search-position-form").keyup(debounce(function() {
+                let search = $('#cars-search').val();
+                currentPage = 1;
+                layDSChucVuSearchNangCao($('#serch-position-text').val(), search);
+            }, 200));
 
-        function layDSChucVuAjax() {
-            $.get(`http://localhost/Software-Technology/position/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
-                // Không được gán biến response này ra ngoài function,
-                // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
-                // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
-                //data là danh sách usser
-                //page là trang hiện tại
-                // rowsPerpage là số dòng trên 1 trang
-                // totalPage là tổng số trang
-                const table1 = $('#table1 > tbody');
-                table1.empty();
-                checkedRows = [];
-                $row = 0;
+            function layDSChucVuAjax() {
+                $.get(`<?= Config::get('URL') ?>position/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
+                    // Không được gán biến response này ra ngoài function,
+                    // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
+                    // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
+                    //data là danh sách usser
+                    //page là trang hiện tại
+                    // rowsPerpage là số dòng trên 1 trang
+                    // totalPage là tổng số trang
+                    const table1 = $('#table1 > tbody');
+                    table1.empty();
+                    checkedRows = [];
+                    $row = 0;
 
-                response.data.forEach(data => {
-                    let disabled = "disabled btn icon icon-left btn-secondary";                   
-                    if ($row % 2 == 0) {
+                    response.data.forEach(data => {
+                        let disabled = "disabled btn icon icon-left btn-secondary";
+                        if ($row % 2 == 0) {
 
-                        table1.append(`
+                            table1.append(`
                         <tr class="table-light">
                             <td>
                                 <div class="custom-control custom-checkbox">
@@ -453,8 +454,8 @@ View::$activeItem = 'position';
                                 </button>
                             </td>
                         </tr>`);
-                    } else {
-                        table1.append(`
+                        } else {
+                            table1.append(`
                         <tr class="table-info">
                             <td>
                                 <div class="custom-control custom-checkbox">
@@ -475,52 +476,52 @@ View::$activeItem = 'position';
                                 </button>
                             </td>
                         </tr>`);
-                    }
-                    checkedRows.push(data.ma_chuc_vu);
-                    $row += 1;
-                });
+                        }
+                        checkedRows.push(data.ma_chuc_vu);
+                        $row += 1;
+                    });
 
-                const pagination = $('#pagination');
-                // Xóa phân trang cũ
-                pagination.empty();
-                if (response.totalPage > 1) {
-                    for (let i = 1; i <= response.totalPage; i++) {
-                        if (i == currentPage) {
-                            pagination.append(`
+                    const pagination = $('#pagination');
+                    // Xóa phân trang cũ
+                    pagination.empty();
+                    if (response.totalPage > 1) {
+                        for (let i = 1; i <= response.totalPage; i++) {
+                            if (i == currentPage) {
+                                pagination.append(`
                         <li class="page-item active">
                             <button class="page-link" onClick='changePage(${i})'>${i}</button>
                         </li>`)
-                        } else {
-                            pagination.append(`
+                            } else {
+                                pagination.append(`
                         <li class="page-item">
                             <button class="page-link" onClick='changePage(${i})'>${i}</button>
                         </li>`)
+                            }
+
                         }
-
                     }
-                }
 
-            });
-        }
+                });
+            }
 
-        function layDSChucVuSearchNangCao(search, search2) {
-            $.get(`http://localhost/Software-Technology/position/getListSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
-                // Không được gán biến response này ra ngoài function,
-                // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
-                // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
-                //data là danh sách usser
-                //page là trang hiện tại
-                // rowsPerpage là số dòng trên 1 trang
-                // totalPage là tổng số trang
-                const table1 = $('#table1 > tbody');
-                table1.empty();
-                checkedRows = [];
-                $row = 0;              
-                response.data.forEach(data => {
-                    let disabled = "disabled btn icon icon-left btn-secondary";                    
-                    if ($row % 2 == 0) {
+            function layDSChucVuSearchNangCao(search, search2) {
+                $.get(`<?= Config::get('URL') ?>position/getListSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
+                    // Không được gán biến response này ra ngoài function,
+                    // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
+                    // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
+                    //data là danh sách usser
+                    //page là trang hiện tại
+                    // rowsPerpage là số dòng trên 1 trang
+                    // totalPage là tổng số trang
+                    const table1 = $('#table1 > tbody');
+                    table1.empty();
+                    checkedRows = [];
+                    $row = 0;
+                    response.data.forEach(data => {
+                        let disabled = "disabled btn icon icon-left btn-secondary";
+                        if ($row % 2 == 0) {
 
-                        table1.append(`
+                            table1.append(`
                         <tr class="table-light">
                             <td>
                                 <div class="custom-control custom-checkbox">
@@ -541,8 +542,8 @@ View::$activeItem = 'position';
                                 </button>
                             </td>
                         </tr>`);
-                    } else {
-                        table1.append(`
+                        } else {
+                            table1.append(`
                         <tr class="table-info">
                             <td>
                                 <div class="custom-control custom-checkbox">
@@ -563,219 +564,219 @@ View::$activeItem = 'position';
                                 </button>
                             </td>
                         </tr>`);
-                    }
-                    checkedRows.push(data.ma_chuc_vu);
-                    $row += 1;
-                });
+                        }
+                        checkedRows.push(data.ma_chuc_vu);
+                        $row += 1;
+                    });
 
-                const pagination = $('#pagination');
-                // Xóa phân trang cũ
-                pagination.empty();
-                if (response.totalPage > 1) {
-                    for (let i = 1; i <= response.totalPage; i++) {
-                        if (i == currentPage) {
-                            pagination.append(`
+                    const pagination = $('#pagination');
+                    // Xóa phân trang cũ
+                    pagination.empty();
+                    if (response.totalPage > 1) {
+                        for (let i = 1; i <= response.totalPage; i++) {
+                            if (i == currentPage) {
+                                pagination.append(`
                         <li class="page-item active">
                             <button class="page-link" onClick='changePageSearchNangCao(${i},"${search}","${search2}")'>${i}</button>
                         </li>`)
-                        } else {
-                            pagination.append(`
+                            } else {
+                                pagination.append(`
                         <li class="page-item">
                             <button class="page-link" onClick='changePageSearchNangCao(${i},"${search}","${search2}")'>${i}</button>
                         </li>`)
+                            }
+
                         }
-
                     }
-                }
 
-            });
-        }
-
-        function viewRow(params) {
-            chucnangs.forEach(function(cn) {
-                    $('#view-' + cn.ma_chuc_nang).prop('checked', false);                        
-            }); 
-            let data = {
-                macv: params
-            };
-            $.post(`http://localhost/Software-Technology/position/getPosition`, data, function(response) {
-                if (response.thanhcong) {
-                    $("#view-machucvu").val(response.ma_chuc_vu);
-                    $("#view-tenchucvu").val(response.ten_chuc_vu);   
-                    response.chitiet.forEach(function(cn) {
-                        $('#view-' + cn.ma_chuc_nang).prop('checked', true);                        
-                    });                 
-                }
-            });
-            $("#view-position-modal").modal('toggle');
-        }        
-
-        function repairRow(params) {
-            chucnangs.forEach(function(cn) {
-                $('#re-' + cn.ma_chuc_nang).prop('checked', false);                        
-            }); 
-            let data = {
-                macv: params
-            };
-            $.post(`http://localhost/Software-Technology/position/getPosition`, data, function(response) {
-                if (response.thanhcong) {
-                    $("#re-machucvu").val(response.ma_chuc_vu);
-                    $("#re-tenchucvu").val(response.ten_chuc_vu);   
-                    response.chitiet.forEach(function(cn) {
-                        $('#re-' + cn.ma_chuc_nang).prop('checked', true);                        
-                    });                 
-                }
-            });
-            $("#repair-position-modal").modal('toggle');
-            //Sua form
-            $("form[name='repair-position-form']").validate({
-                rules: {                                
-                    tenchucvu: {
-                        required: true,
-                    },
-                },
-                messages: {                    
-                    tenchucvu: {
-                        required: "Vui lòng nhập tên chức vụ",
-                    },                    
-                },
-                submitHandler: function(form, event) {                    
-                    event.preventDefault();
-                    $("#myModalLabel110").text("Quản Lý chức vụ");
-                    $("#question-model").text("Bạn có chắc chắn muốn sửa chức vụ này không");
-                    $("#question-position-modal").modal('toggle');                    
-                    $('#thuchien').off('click')
-                    $("#thuchien").click(function() {
-                        // lấy dữ liệu từ form
-
-                        const tam = Object.fromEntries(new FormData(form).entries());
-                        tam['machucvu'] = $('#re-machucvu').val();
-                        chucnangs.forEach(cn => {
-                            if ($('#re-' + cn.ma_chuc_nang).prop("checked")) {
-                                tam[cn.ma_chuc_nang] = 1;
-                            }
-                        });
-                        let chitiet = [];
-                        Object.keys(tam).forEach(key => {
-                            if(key == 'machucvu' || key == 'tenchucvu'){
-                                return;
-                            }
-                            let temp = {
-                                ma_chuc_vu: tam['machucvu'],
-                                ma_chuc_nang: key,                                
-                            }
-                            chitiet.push(temp)
-                        })
-                        let data = {
-                            machucvu :tam['machucvu'],
-                            tenchucvu :tam['tenchucvu'],
-                            chitiets : JSON.stringify(chitiet)
-                        }
-                        $.post(`http://localhost/Software-Technology/position/update`, data, function(response) {
-                            if (response.thanhcong) {
-                                currentPage = 1;
-                                layDSChucVuAjax();
-                                Toastify({
-                                    text: "Sửa Thành Công",
-                                    duration: 1000,
-                                    close: true,
-                                    gravity: "top",
-                                    position: "center",
-                                    backgroundColor: "#4fbe87",
-                                }).showToast();
-                            } else {
-                                Toastify({
-                                    text: "Sửa Thất Bại",
-                                    duration: 1000,
-                                    close: true,
-                                    gravity: "top",
-                                    position: "center",
-                                    backgroundColor: "#FF6A6A",
-                                }).showToast();
-                            }
-
-                            // Đóng modal
-                            $("#repair-position-modal").modal('toggle')
-                        });
-                    });
-                }
-            })
-        }
-
-        function deleteRow(params) {
-            let data = {
-                macv: params
-            };
-            $("#myModalLabel110").text("Quản Lý Chức Vụ");
-            $("#question-model").text("Bạn có chắc chắn muốn xóa chức vụ này không");
-            $("#question-position-modal").modal('toggle');
-            $('#thuchien').off('click');
-            $("#thuchien").click(function() {
-                $.post(`http://localhost/Software-Technology/position/delete`, data, function(response) {
-                    if (response.thanhcong) {
-                        Toastify({
-                            text: "Xóa Thành Công",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#4fbe87",
-                        }).showToast();
-                        currentPage = 1;
-                        layDSChucVuAjax();
-                    } else {
-                        Toastify({
-                            text: "Xóa Thất Bại",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#FF6A6A",
-                        }).showToast();
-                    }
                 });
-            });
+            }
 
-        }
-        $("#btn-delete-position").click(function() {
-            $("#myModalLabel110").text("Quản Lý Chức Vụ");
-            $("#question-model").text("Bạn có chắc chắn muốn xóa những chức vụ này không");
-            $("#question-position-modal").modal('toggle');
-            $('#thuchien').off('click')
-            $("#thuchien").click(function() {
-                let datas = []
-                checkedRows.forEach(checkedRow => {
-                    if ($('#' + checkedRow).prop("checked")) {
-                        datas.push(checkedRow);
-                    }
+            function viewRow(params) {
+                chucnangs.forEach(function(cn) {
+                    $('#view-' + cn.ma_chuc_nang).prop('checked', false);
                 });
                 let data = {
-                    macvs: JSON.stringify(datas)
+                    macv: params
                 };
-                $.post(`http://localhost/Software-Technology/position/deletes`, data, function(response) {
+                $.post(`<?= Config::get('URL') ?>position/getPosition`, data, function(response) {
                     if (response.thanhcong) {
-                        Toastify({
-                            text: "Xóa Thành Công",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#4fbe87",
-                        }).showToast();
-                        currentPage = 1;
-                        layDSChucVuAjax();
-                    } else {
-                        Toastify({
-                            text: "Xóa Thất Bại",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#FF6A6A",
-                        }).showToast();
+                        $("#view-machucvu").val(response.ma_chuc_vu);
+                        $("#view-tenchucvu").val(response.ten_chuc_vu);
+                        response.chitiet.forEach(function(cn) {
+                            $('#view-' + cn.ma_chuc_nang).prop('checked', true);
+                        });
                     }
                 });
+                $("#view-position-modal").modal('toggle');
+            }
+
+            function repairRow(params) {
+                chucnangs.forEach(function(cn) {
+                    $('#re-' + cn.ma_chuc_nang).prop('checked', false);
+                });
+                let data = {
+                    macv: params
+                };
+                $.post(`<?= Config::get('URL') ?>position/getPosition`, data, function(response) {
+                    if (response.thanhcong) {
+                        $("#re-machucvu").val(response.ma_chuc_vu);
+                        $("#re-tenchucvu").val(response.ten_chuc_vu);
+                        response.chitiet.forEach(function(cn) {
+                            $('#re-' + cn.ma_chuc_nang).prop('checked', true);
+                        });
+                    }
+                });
+                $("#repair-position-modal").modal('toggle');
+                //Sua form
+                $("form[name='repair-position-form']").validate({
+                    rules: {
+                        tenchucvu: {
+                            required: true,
+                        },
+                    },
+                    messages: {
+                        tenchucvu: {
+                            required: "Vui lòng nhập tên chức vụ",
+                        },
+                    },
+                    submitHandler: function(form, event) {
+                        event.preventDefault();
+                        $("#myModalLabel110").text("Quản Lý chức vụ");
+                        $("#question-model").text("Bạn có chắc chắn muốn sửa chức vụ này không");
+                        $("#question-position-modal").modal('toggle');
+                        $('#thuchien').off('click')
+                        $("#thuchien").click(function() {
+                            // lấy dữ liệu từ form
+
+                            const tam = Object.fromEntries(new FormData(form).entries());
+                            tam['machucvu'] = $('#re-machucvu').val();
+                            chucnangs.forEach(cn => {
+                                if ($('#re-' + cn.ma_chuc_nang).prop("checked")) {
+                                    tam[cn.ma_chuc_nang] = 1;
+                                }
+                            });
+                            let chitiet = [];
+                            Object.keys(tam).forEach(key => {
+                                if (key == 'machucvu' || key == 'tenchucvu') {
+                                    return;
+                                }
+                                let temp = {
+                                    ma_chuc_vu: tam['machucvu'],
+                                    ma_chuc_nang: key,
+                                }
+                                chitiet.push(temp)
+                            })
+                            let data = {
+                                machucvu: tam['machucvu'],
+                                tenchucvu: tam['tenchucvu'],
+                                chitiets: JSON.stringify(chitiet)
+                            }
+                            $.post(`<?= Config::get('URL') ?>position/update`, data, function(response) {
+                                if (response.thanhcong) {
+                                    currentPage = 1;
+                                    layDSChucVuAjax();
+                                    Toastify({
+                                        text: "Sửa Thành Công",
+                                        duration: 1000,
+                                        close: true,
+                                        gravity: "top",
+                                        position: "center",
+                                        backgroundColor: "#4fbe87",
+                                    }).showToast();
+                                } else {
+                                    Toastify({
+                                        text: "Sửa Thất Bại",
+                                        duration: 1000,
+                                        close: true,
+                                        gravity: "top",
+                                        position: "center",
+                                        backgroundColor: "#FF6A6A",
+                                    }).showToast();
+                                }
+
+                                // Đóng modal
+                                $("#repair-position-modal").modal('toggle')
+                            });
+                        });
+                    }
+                })
+            }
+
+            function deleteRow(params) {
+                let data = {
+                    macv: params
+                };
+                $("#myModalLabel110").text("Quản Lý Chức Vụ");
+                $("#question-model").text("Bạn có chắc chắn muốn xóa chức vụ này không");
+                $("#question-position-modal").modal('toggle');
+                $('#thuchien').off('click');
+                $("#thuchien").click(function() {
+                    $.post(`<?= Config::get('URL') ?>position/delete`, data, function(response) {
+                        if (response.thanhcong) {
+                            Toastify({
+                                text: "Xóa Thành Công",
+                                duration: 1000,
+                                close: true,
+                                gravity: "top",
+                                position: "center",
+                                backgroundColor: "#4fbe87",
+                            }).showToast();
+                            currentPage = 1;
+                            layDSChucVuAjax();
+                        } else {
+                            Toastify({
+                                text: "Xóa Thất Bại",
+                                duration: 1000,
+                                close: true,
+                                gravity: "top",
+                                position: "center",
+                                backgroundColor: "#FF6A6A",
+                            }).showToast();
+                        }
+                    });
+                });
+
+            }
+            $("#btn-delete-position").click(function() {
+                $("#myModalLabel110").text("Quản Lý Chức Vụ");
+                $("#question-model").text("Bạn có chắc chắn muốn xóa những chức vụ này không");
+                $("#question-position-modal").modal('toggle');
+                $('#thuchien').off('click')
+                $("#thuchien").click(function() {
+                    let datas = []
+                    checkedRows.forEach(checkedRow => {
+                        if ($('#' + checkedRow).prop("checked")) {
+                            datas.push(checkedRow);
+                        }
+                    });
+                    let data = {
+                        macvs: JSON.stringify(datas)
+                    };
+                    $.post(`<?= Config::get('URL') ?>position/deletes`, data, function(response) {
+                        if (response.thanhcong) {
+                            Toastify({
+                                text: "Xóa Thành Công",
+                                duration: 1000,
+                                close: true,
+                                gravity: "top",
+                                position: "center",
+                                backgroundColor: "#4fbe87",
+                            }).showToast();
+                            currentPage = 1;
+                            layDSChucVuAjax();
+                        } else {
+                            Toastify({
+                                text: "Xóa Thất Bại",
+                                duration: 1000,
+                                close: true,
+                                gravity: "top",
+                                position: "center",
+                                backgroundColor: "#FF6A6A",
+                            }).showToast();
+                        }
+                    });
+                });
             });
-        });
-    </script>
+        </script>
 </body>

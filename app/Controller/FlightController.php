@@ -15,11 +15,11 @@ class FlightController extends Controller
         parent::__construct();
     }
 
-    public function flight()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN05");
-        $this->View->render('flight/flight');
+        $this->View->render('flight/index');
     }
 
     public function create(){

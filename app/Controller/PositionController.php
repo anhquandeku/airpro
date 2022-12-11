@@ -15,11 +15,11 @@ class PositionController extends Controller
         parent::__construct();
     }
 
-    public function position()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
-        $this->View->render('position/position');
+        $this->View->render('position/index');
     }
 
     public function checkValidMaChucVu()

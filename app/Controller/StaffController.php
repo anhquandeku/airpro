@@ -15,11 +15,11 @@ class StaffController extends Controller
         parent::__construct();
     }
 
-    public function staff()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
-        $this->View->render('staff/staff');
+        $this->View->render('staff/index');
     }
 
     public function create(){

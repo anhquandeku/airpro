@@ -187,7 +187,6 @@ View::$activeItem = 'ticket';
                     event.preventDefault();
                     // lấy dữ liệu từ form
                     const data = Object.fromEntries(new FormData(form).entries());
-
                     $.post(`http://localhost/Software-Technology/userticket/getList`, data, function(response) {
                         if (response.thanhcong) {
                             currentPage = 1;

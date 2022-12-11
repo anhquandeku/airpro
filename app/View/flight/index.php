@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Config;
 use App\Core\View;
 
 View::$activeItem = 'flight';
@@ -11,18 +12,16 @@ View::$activeItem = 'flight';
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Học Tập</title>
-
+    <title>AirPro</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="<?= View::assets('css/bootstrap.css') ?>" />
-
-    <link rel="stylesheet" href="<?= View::assets('vendors/toastify/toastify.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.css') ?>" />
-    <link rel="stylesheet" href="<?= View::assets('vendors/bootstrap-icons/bootstrap-icons.css') ?>" />
     <link rel="stylesheet" href="<?= View::assets('css/app.css') ?>" />
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon" />
     <link rel="stylesheet" href="<?= View::assets('css/quan.css') ?>" />
+    <link rel="stylesheet" href="<?= View::assets('css/global.css') ?>" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -125,56 +124,60 @@ View::$activeItem = 'flight';
                                         </div>
                                         <label for="fullname">Hãng hàng không: </label>
                                         <div class="form-group">
-                                            <select class="form-select"  name="hang" id="cardthem-hang" >
+                                            <select class="form-select" name="hang" id="cardthem-hang">
                                             </select>
                                         </div>
                                         <label for="fullname">Nơi đi: </label>
-                                        <div class="form-group" >
-                                            <select class="form-select" name="noidi" id="cardthem-noidi" >
+                                        <div class="form-group">
+                                            <select class="form-select" name="noidi" id="cardthem-noidi">
                                             </select>
                                         </div>
                                         <label for="fullname">Nơi đến: </label>
-                                        <div class="form-group" >
-                                            <select class="form-select" name="noiden" id="cardthem-noiden" >
+                                        <div class="form-group">
+                                            <select class="form-select" name="noiden" id="cardthem-noiden">
                                             </select>
                                         </div>
                                         <label for="fullname">Ngày bay : </label>
                                         <div class="form-group">
-                                            <input type="date" id="themngaybay" name="ngaybay" min="<?php date_default_timezone_set('Asia/Ho_Chi_Minh'); $today = date("Y-m-d"); echo $today?>"  class="form-control">
+                                            <input type="date" id="themngaybay" name="ngaybay" min="<?php date_default_timezone_set('Asia/Ho_Chi_Minh');
+                                                                                                    $today = date("Y-m-d");
+                                                                                                    echo $today ?>" class="form-control">
                                         </div>
                                         <label for="fullname">Ngày dến : </label>
                                         <div class="form-group">
-                                            <input type="date" id="themngayden" name="ngayden" min="<?php date_default_timezone_set('Asia/Ho_Chi_Minh'); $today = date("Y-m-d"); echo $today?>"  class="form-control">
+                                            <input type="date" id="themngayden" name="ngayden" min="<?php date_default_timezone_set('Asia/Ho_Chi_Minh');
+                                                                                                    $today = date("Y-m-d");
+                                                                                                    echo $today ?>" class="form-control">
                                         </div>
                                         <label for="fullname">Giờ bay: </label>
                                         <div class="form-group">
-                                        <select style="width:50% ;float:left" class="form-select" name="themgiodi" id="themgiodi" >
-                                            <?php for($i=0 ;$i<=23;$i++){ ?>
-                                            <option value="<?php echo $i ?>"><?php echo $i ?> </option>
-                                            <?php } ?>
-                                        </select>
-                                        <select style="width:50%" class="form-select" name="themphutdi" id="themphutdi" >
-                                            <?php for($i=0 ;$i<=59;$i++){ ?>
-                                            <option value="<?php echo $i ?>"><?php echo $i ?> </option>
-                                            <?php } ?>
-                                        </select>
+                                            <select style="width:50% ;float:left" class="form-select" name="themgiodi" id="themgiodi">
+                                                <?php for ($i = 0; $i <= 23; $i++) { ?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?> </option>
+                                                <?php } ?>
+                                            </select>
+                                            <select style="width:50%" class="form-select" name="themphutdi" id="themphutdi">
+                                                <?php for ($i = 0; $i <= 59; $i++) { ?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?> </option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                         <label for="fullname">Giờ đến: </label>
                                         <div class="form-group">
-                                        <select style="width:50% ;float:left" class="form-select" name="themgioden" id="themgioden" >
-                                            <?php for($i=0 ;$i<=23;$i++){ ?>
-                                            <option value="<?php echo $i ?>"><?php echo $i ?> </option>
-                                            <?php } ?>
-                                        </select>
-                                        <select style="width:50%" class="form-select" name="themphutden" id="themphutden" >
-                                            <?php for($i=0 ;$i<=59;$i++){ ?>
-                                            <option value="<?php echo $i ?>"><?php echo $i ?> </option>
-                                            <?php } ?>
-                                        </select>
+                                            <select style="width:50% ;float:left" class="form-select" name="themgioden" id="themgioden">
+                                                <?php for ($i = 0; $i <= 23; $i++) { ?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?> </option>
+                                                <?php } ?>
+                                            </select>
+                                            <select style="width:50%" class="form-select" name="themphutden" id="themphutden">
+                                                <?php for ($i = 0; $i <= 59; $i++) { ?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?> </option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                         <label for="fullname">Số hiệu máy bay: </label>
                                         <div class="form-group">
-                                            <select style="width:70%; float:left" class="form-select" name="themmaybay" id="themmaybay" >
+                                            <select style="width:70%; float:left" class="form-select" name="themmaybay" id="themmaybay">
                                             </select>
                                             <button style="width:30%" id="nutmaybay" type="button" class="btn btn-primary ml-1">
                                                 <i class="bx bx-check d-block d-sm-none"></i>
@@ -220,17 +223,17 @@ View::$activeItem = 'flight';
                                         </div>
                                         <label for="re-cccdkh">Mã hãng hàng không: </label>
                                         <div class="form-group">
-                                        <select class="form-select" name="hang" id="cardsua-hang" >
+                                            <select class="form-select" name="hang" id="cardsua-hang">
                                             </select>
                                         </div>
                                         <label for="fullname">Nơi đi: </label>
                                         <div class="form-group" id="suanoidi">
-                                            <select class="form-select" name="noidi" id="cardsua-noidi" >
+                                            <select class="form-select" name="noidi" id="cardsua-noidi">
                                             </select>
                                         </div>
                                         <label for="fullname">Nơi đến: </label>
                                         <div class="form-group" id="suanoiden">
-                                            <select class="form-select" name="noiden" id="cardsua-noiden" >
+                                            <select class="form-select" name="noiden" id="cardsua-noiden">
                                             </select>
                                         </div>
                                         <label for="re-birthdaykh">Ngày bay: </label>
@@ -239,27 +242,27 @@ View::$activeItem = 'flight';
                                         </div>
                                         <label for="re-genderkh">Giờ bay: </label>
                                         <div class="form-group">
-                                            <select style="width:50% ;float:left" class="form-select" name="suagiodi" id="cardthem-noiden" >
-                                                <?php for($i=0 ;$i<=23;$i++){ ?>
-                                                <option value="<?php echo $i ?>"><?php echo $i ?> </option>
+                                            <select style="width:50% ;float:left" class="form-select" name="suagiodi" id="cardthem-noiden">
+                                                <?php for ($i = 0; $i <= 23; $i++) { ?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?> </option>
                                                 <?php } ?>
                                             </select>
-                                            <select style="width:50%" class="form-select" name="suaphutdi" id="cardthem-noiden" >
-                                                <?php for($i=0 ;$i<=59;$i++){ ?>
-                                                <option value="<?php echo $i ?>"><?php echo $i ?> </option>
+                                            <select style="width:50%" class="form-select" name="suaphutdi" id="cardthem-noiden">
+                                                <?php for ($i = 0; $i <= 59; $i++) { ?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?> </option>
                                                 <?php } ?>
                                             </select>
                                         </div>
                                         <label for="re-addresskh">Giờ đến: </label>
                                         <div class="form-group">
-                                            <select style="width:50% ;float:left" class="form-select" name="suagioden" id="cardthem-noiden" >
-                                                <?php for($i=0 ;$i<=23;$i++){ ?>
-                                                <option value="<?php echo $i ?>"><?php echo $i ?> </option>
+                                            <select style="width:50% ;float:left" class="form-select" name="suagioden" id="cardthem-noiden">
+                                                <?php for ($i = 0; $i <= 23; $i++) { ?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?> </option>
                                                 <?php } ?>
                                             </select>
-                                            <select style="width:50%" class="form-select" name="suaphutden" id="cardthem-noiden" >
-                                                <?php for($i=0 ;$i<=59;$i++){ ?>
-                                                <option value="<?php echo $i ?>"><?php echo $i ?> </option>
+                                            <select style="width:50%" class="form-select" name="suaphutden" id="cardthem-noiden">
+                                                <?php for ($i = 0; $i <= 59; $i++) { ?>
+                                                    <option value="<?php echo $i ?>"><?php echo $i ?> </option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -276,17 +279,17 @@ View::$activeItem = 'flight';
                                             <input type="number" id="suatt" name="tt" placeholder="Tên hạng" class="form-control">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                        <i class="bx bx-x d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Đóng</span>
-                                    </button>
-                                    <button id="repair-queston" type="submit" class="btn btn-primary ml-1">
-                                        <i class="bx bx-check d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Sửa</span>
-                                    </button>
-                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Đóng</span>
+                                </button>
+                                <button id="repair-queston" type="submit" class="btn btn-primary ml-1">
+                                    <i class="bx bx-check d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Sửa</span>
+                                </button>
+                            </div>
                             </form>
                         </div>
                     </div>
@@ -435,25 +438,27 @@ View::$activeItem = 'flight';
             </div>
         </div>
     </div>
-    <script src="<?= View::assets('vendors/toastify/toastify.js') ?>"></script>
-    <script src="<?= View::assets('vendors/perfect-scrollbar/perfect-scrollbar.min.js') ?>"></script>
-    <script src="<?= View::assets('js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script src="<?= View::assets('js/main.js') ?>"></script>
     <script src="<?= View::assets('js/changepass.js') ?>"></script>
     <script src="<?= View::assets('js/menu.js') ?>"></script>
     <script src="<?= View::assets('js/api.js') ?>"></script>
+    <script src="<?= View::assets('js/html/flight.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+    <script src="<?= View::assets('vendors/boostrap/bootstrap.min.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let currentPage = 1
         let checkedRows = [];
-        let quyens
+        let quyens;
         // on ready
-        $(function() {
+        $(function() {   
             layDSflightAjax();
             // kietm tra quyen
             // Đặt sự kiện validate cho modal add rank
-            $.post(`http://localhost/Software-Technology/flight/getsanbay`, function(response) {
+            $.post(`<?= Config::get('URL') ?>flight/getsanbay`, function(response) {
                 if (response.thanhcong) {
                     response.sanbay.forEach(sanbay => {
                         let opt = '<option value="' + sanbay.ma_san_bay + '">' + sanbay.dia_diem + '</option>';
@@ -469,11 +474,11 @@ View::$activeItem = 'flight';
                         $("#cardsua-hang").append(opt);
 
                     });
-                    
+
                 }
             });
-            $.post(`http://localhost/Software-Technology/flight/setTrangThai`, function(response) {
-                if(response.thanhcong) {
+            $.post(`<?= Config::get('URL') ?>/flight/setTrangThai`, function(response) {
+                if (response.thanhcong) {
                     layDSflightAjax();
                 }
             });
@@ -485,35 +490,35 @@ View::$activeItem = 'flight';
                     hang: {
                         required: true,
                         // remote: {
-                        //     url: "http://localhost/Software-Technology/rank/checkvaliemucdiem",
+                        //     url: "<?= Config::get('URL') ?>rank/checkvaliemucdiem",
                         //     type: "POST",
                         // }
                     },
                     noidi: {
                         required: true,
                         // remote: {
-                        //     url: "http://localhost/Software-Technology/rank/checkvaliemucdiem",
+                        //     url: "<?= Config::get('URL') ?>rank/checkvaliemucdiem",
                         //     type: "POST",
                         // }
                     },
                     noiden: {
                         required: true,
                         // remote: {
-                        //     url: "http://localhost/Software-Technology/rank/checkvaliemucdiem",
+                        //     url: "<?= Config::get('URL') ?>rank/checkvaliemucdiem",
                         //     type: "POST",
                         // }
                     },
                     ngaybay: {
                         required: true,
                         // remote: {
-                        //     url: "http://localhost/Software-Technology/fl/checkvaliemucdiem",
+                        //     url: "<?= Config::get('URL') ?>fl/checkvaliemucdiem",
                         //     type: "POST",
                         // }
                     },
                     ngayden: {
                         required: true,
                         // remote: {
-                        //     url: "http://localhost/Software-Technology/flight/checkvaliemucdiem",
+                        //     url: "<?= Config::get('URL') ?>flight/checkvaliemucdiem",
                         //     type: "POST",
                         // }
                     },
@@ -522,7 +527,7 @@ View::$activeItem = 'flight';
                     },
                     themgioden: {
                         required: true,
-                        
+
                     },
                     themphutdi: {
                         required: true,
@@ -567,14 +572,14 @@ View::$activeItem = 'flight';
                 submitHandler: function(form, event) {
                     event.preventDefault();
                     // lấy dữ liệu từ form
-                    if(getmaybay()==true){
+                    if (getmaybay() == true) {
                         const data = Object.fromEntries(new FormData(form).entries());
-                        var giodi1 = getthoigian(data['themgiodi'],data['themphutdi']);
-                        var giodi2 = getthoigian(data['themgioden'],data['themphutden']);
-                        data['giodi1']=giodi1;
-                        data['giodi2']=giodi2;
-                        if(data['noidi']!=data['noiden']){
-                            $.post(`http://localhost/Software-Technology/flight/create`, data, function(response) {
+                        var giodi1 = getthoigian(data['themgiodi'], data['themphutdi']);
+                        var giodi2 = getthoigian(data['themgioden'], data['themphutden']);
+                        data['giodi1'] = giodi1;
+                        data['giodi2'] = giodi2;
+                        if (data['noidi'] != data['noiden']) {
+                            $.post(`<?= Config::get('URL') ?>/flight/create`, data, function(response) {
                                 console.log(response);
                                 if (response.thanhcong) {
                                     currentPage = 1;
@@ -587,7 +592,7 @@ View::$activeItem = 'flight';
                                         position: "center",
                                         backgroundColor: "#4fbe87",
                                     }).showToast();
-                                } else{
+                                } else {
                                     Toastify({
                                         text: "Thêm thất bại",
                                         duration: 1000,
@@ -608,15 +613,15 @@ View::$activeItem = 'flight';
                             $('#cardthem-noidi').val("");
                             $('#cardthem-noiden').val("");
                             $('#themmaybay').val("");
-                        }else{
+                        } else {
                             Toastify({
-                            text: "Nơi đi không được trùng với nơi đến",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#FF6A6A",
-                        }).showToast();
+                                text: "Nơi đi không được trùng với nơi đến",
+                                duration: 1000,
+                                close: true,
+                                gravity: "top",
+                                position: "center",
+                                backgroundColor: "#FF6A6A",
+                            }).showToast();
                         }
                     } else {
                         Toastify({
@@ -632,31 +637,33 @@ View::$activeItem = 'flight';
             })
 
         });
-        function getmaybay(){
-            var giodi= $('#themgiodi').val();
-            var phutdi=$('#themphutdi').val();
-            var gioden= $('#themgioden').val();
-            var phutden= $('#themphutden').val();
-            var gio2=getthoigian(giodi,phutdi);
-            var gio3=getthoigian(gioden,phutden);
-            if(gio2 > gio3){
+
+        function getmaybay() {
+            var giodi = $('#themgiodi').val();
+            var phutdi = $('#themphutdi').val();
+            var gioden = $('#themgioden').val();
+            var phutden = $('#themphutden').val();
+            var gio2 = getthoigian(giodi, phutdi);
+            var gio3 = getthoigian(gioden, phutden);
+            if (gio2 > gio3) {
                 return false;
             }
             return true;
         }
-        function getthoigian(gio,phut){
-            var tg="";
-            if(gio<10) {
-                if(phut<10) {
-                    tg="0"+gio+":0"+phut+":00";
+
+        function getthoigian(gio, phut) {
+            var tg = "";
+            if (gio < 10) {
+                if (phut < 10) {
+                    tg = "0" + gio + ":0" + phut + ":00";
                 } else {
-                    tg="0"+gio+":"+phut+":00";
+                    tg = "0" + gio + ":" + phut + ":00";
                 }
             } else {
-                if(phut<10) {
-                    tg=+gio+":0"+phut+":00";
+                if (phut < 10) {
+                    tg = +gio + ":0" + phut + ":00";
                 } else {
-                    tg=+gio+":"+phut+":00";
+                    tg = +gio + ":" + phut + ":00";
                 }
             }
             return tg;
@@ -667,16 +674,16 @@ View::$activeItem = 'flight';
                 noiden: $('#cardthem-noiden').val(),
                 ngaybay: $('#themngaybay').val(),
                 hang: $('#cardthem-hang').val(),
-                giodi: getthoigian($('#themgiodi').val(),$('#themphutdi').val()),
-                gioden: getthoigian($('#themgioden').val(),$('#themphutden').val()),
+                giodi: getthoigian($('#themgiodi').val(), $('#themphutdi').val()),
+                gioden: getthoigian($('#themgioden').val(), $('#themphutden').val()),
                 ngayden: $('#themngayden').val(),
             };
-            if(data['noidi']!=data['noiden']) {
-                $.post(`http://localhost/Software-Technology/flight/getsohieu`, data, function(response) {
+            if (data['noidi'] != data['noiden']) {
+                $.post(`<?= Config::get('URL') ?>flight/getsohieu`, data, function(response) {
                     console.log(response);
-                    let opt="";
+                    let opt = "";
                     response.forEach(data => {
-                        opt+= '<option value="' + data + '">' + data + '</option>';
+                        opt += '<option value="' + data + '">' + data + '</option>';
                     });
                     $("#themmaybay").html(opt);
                 });
@@ -691,7 +698,7 @@ View::$activeItem = 'flight';
                 }).showToast();
             }
         });
-        
+
         $("#open-add-flight-btn").click(function() {
             $('#themtencb').val("");
             $('#themngaybay').val("");
@@ -711,6 +718,7 @@ View::$activeItem = 'flight';
             currentPage = newPage;
             layDSFlightSearchNangCao(search, search2);
         }
+
         function changePageSearchNangCao1(newPage, search) {
             currentPage = newPage;
             layDSFlightSearchNangCao1(search);
@@ -733,11 +741,11 @@ View::$activeItem = 'flight';
             currentPage = 1;
             //alert($('#serch-flight-text').val());
             layDSFlightSearchNangCao($('#serch-flight-text').val(), search);
-        },200));
+        }, 200));
 
         function layDSflightAjax() {
-            $.get(`http://localhost/Software-Technology/flight/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
-                console.log(response);
+            $.get(`<?= Config::get('URL') ?>/flight/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
+                console.log(response);  
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
                 // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
@@ -749,24 +757,24 @@ View::$activeItem = 'flight';
                 table1.empty();
                 checkedRows = [];
                 $row = 0;
-                let s=0;
+                let s = 0;
                 console.log("on");
                 response.data.forEach(data => {
                     console.log("kon");
-                    let noidi="";
-                    let noiden="";
-                    let tt="";
-                    if(data.trang_thai==1){
-                        tt='<select ><option selected value="1">Chưa công bố(chưa có vé)</option></select>';
-                    }else if(data.trang_thai == 2){
-                        tt='<select id="tinhtrang1" name="'+data.ma_chuyen_bay+'"><option selected value="2">Chưa công bố(Có vé)</option><option value="3">Đã công bố</option></select>';
-                    }else if(data.trang_thai == 3){
-                        tt='<select><option selected value="3">Đã công bố</option></select>';
-                    }else{
-                        tt='<select><option selected value="4">Đã cất cánh</option> <select>';
+                    let noidi = "";
+                    let noiden = "";
+                    let tt = "";
+                    if (data.trang_thai == 1) {
+                        tt = '<select ><option selected value="1">Chưa công bố(chưa có vé)</option></select>';
+                    } else if (data.trang_thai == 2) {
+                        tt = '<select id="tinhtrang1" name="' + data.ma_chuyen_bay + '"><option selected value="2">Chưa công bố(Có vé)</option><option value="3">Đã công bố</option></select>';
+                    } else if (data.trang_thai == 3) {
+                        tt = '<select><option selected value="3">Đã công bố</option></select>';
+                    } else {
+                        tt = '<select><option selected value="4">Đã cất cánh</option> <select>';
                     }
                     response.sanbay.forEach(sanbay => {
-                         if (sanbay.ma_san_bay == data.ma_san_bay_di) {
+                        if (sanbay.ma_san_bay == data.ma_san_bay_di) {
                             noidi = sanbay.dia_diem;
                             s = s + 1;
                         }
@@ -774,7 +782,7 @@ View::$activeItem = 'flight';
                             noiden = sanbay.dia_diem;
                             s = s + 1;
                         }
-                        if(s==2) {
+                        if (s == 2) {
                             return true;
                         }
                     });
@@ -796,7 +804,7 @@ View::$activeItem = 'flight';
                                 </button>
                             </td>
                         </tr>`);
-                    } else { 
+                    } else {
                         table1.append(`
                         <tr class="table-info">
                            
@@ -842,10 +850,10 @@ View::$activeItem = 'flight';
 
             });
         }
-        $(document).on('change',  '#tinhtrang1', function() {
+        $(document).on('change', '#tinhtrang1', function() {
             var value = $(this).children('option:selected').val();
             var id = $(this).attr('name');
-            let data ={
+            let data = {
                 tinhtrang: value,
                 macb: id,
             };
@@ -854,7 +862,7 @@ View::$activeItem = 'flight';
             $("#question-flight-modal").modal('toggle');
             $('#thuchien').off('click');
             $("#thuchien").click(function() {
-                $.post(`http://localhost/Software-Technology/flight/changestatus`, data, function(response) {
+                $.post(`<?= Config::get('URL') ?>flight/changestatus`, data, function(response) {
                     if (response.thanhcong) {
                         currentPage = 1;
                         layDSflightAjax();
@@ -870,8 +878,9 @@ View::$activeItem = 'flight';
                 });
             });
         });
+
         function layDSFlightSearchNangCao(search, search2) {
-            $.get(`http://localhost/Software-Technology/flight/searchFlight?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
+            $.get(`<?= Config::get('URL') ?>flight/searchFlight?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${search2}`, function(response) {
                 console.log(response);
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
@@ -886,34 +895,34 @@ View::$activeItem = 'flight';
                 $row = 0;
                 response.data.forEach(data => {
                     let disabled = "disabled btn icon icon-left btn-secondary";
-                    let s=0;
-                    let noidi="";
-                    let noiden="";
+                    let s = 0;
+                    let noidi = "";
+                    let noiden = "";
                     response.sanbay.forEach(sanbay => {
-                            if (sanbay.ma_san_bay == data.ma_san_bay_di) {
-                                noidi = sanbay.dia_diem;
-                                s = s + 1;
-                            }
-                            if (sanbay.ma_san_bay == data.ma_san_bay_den) {
-                                noiden = sanbay.dia_diem;
-                                s = s + 1;
-                            }
-                            if(s==2) {
-                                return true;
-                            }
-                        });
-                    let tt="";
-                    if(data.trang_thai==1){
-                        tt='<select ><option selected value="1">Chưa công bố(chưa có vé)</option></select>';
-                    }else if(data.trang_thai == 2){
-                        tt='<select id="tinhtrang1" name="'+data.ma_chuyen_bay+'"><option selected value="2">Chưa công bố(Có vé)</option><option value="3">Đã công bố</option></select>';
-                    }else if(data.trang_thai == 3){
-                        tt='<select ><option selected value="3">Đã công bố</option></select>';
-                    }else{
-                        tt='<select><option selected value="4">Đã cất cánh</option> <select>';
+                        if (sanbay.ma_san_bay == data.ma_san_bay_di) {
+                            noidi = sanbay.dia_diem;
+                            s = s + 1;
+                        }
+                        if (sanbay.ma_san_bay == data.ma_san_bay_den) {
+                            noiden = sanbay.dia_diem;
+                            s = s + 1;
+                        }
+                        if (s == 2) {
+                            return true;
+                        }
+                    });
+                    let tt = "";
+                    if (data.trang_thai == 1) {
+                        tt = '<select ><option selected value="1">Chưa công bố(chưa có vé)</option></select>';
+                    } else if (data.trang_thai == 2) {
+                        tt = '<select id="tinhtrang1" name="' + data.ma_chuyen_bay + '"><option selected value="2">Chưa công bố(Có vé)</option><option value="3">Đã công bố</option></select>';
+                    } else if (data.trang_thai == 3) {
+                        tt = '<select ><option selected value="3">Đã công bố</option></select>';
+                    } else {
+                        tt = '<select><option selected value="4">Đã cất cánh</option> <select>';
                     }
                     if ($row % 2 == 0) {
-                        
+
                         table1.append(`
                         <tr class="table-light">
                             <td>${data.ma_chuyen_bay}</td>
@@ -931,7 +940,7 @@ View::$activeItem = 'flight';
                                 </button>
                             </td>
                         </tr>`);
-                    } else { 
+                    } else {
                         table1.append(`
                         <tr class="table-info">
                             <td>${data.ma_chuyen_bay}</td>
@@ -979,7 +988,7 @@ View::$activeItem = 'flight';
 
 
         function layDSFlightSearchNangCao1(search) {
-            $.get(`http://localhost/Software-Technology/flight/searchFlight1?rowsPerPage=10&page=${currentPage}&search=${search}`, function(response) {
+            $.get(`<?= Config::get('URL') ?>flight/searchFlight1?rowsPerPage=10&page=${currentPage}&search=${search}`, function(response) {
                 console.log(response);
                 // Không được gán biến response này ra ngoài function,
                 // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
@@ -994,34 +1003,34 @@ View::$activeItem = 'flight';
                 $row = 0;
                 response.data.forEach(data => {
                     let disabled = "disabled btn icon icon-left btn-secondary";
-                    let s=0;
-                    let noidi="";
-                    let noiden="";
+                    let s = 0;
+                    let noidi = "";
+                    let noiden = "";
                     response.sanbay.forEach(sanbay => {
-                            if (sanbay.ma_san_bay == data.ma_san_bay_di) {
-                                noidi = sanbay.dia_diem;
-                                s = s + 1;
-                            }
-                            if (sanbay.ma_san_bay == data.ma_san_bay_den) {
-                                noiden = sanbay.dia_diem;
-                                s = s + 1;
-                            }
-                            if(s==2) {
-                                return true;
-                            }
-                        });
-                    let tt="";
-                    if(data.trang_thai==1){
-                        tt='<select ><option selected value="1">Chưa công bố(chưa có vé)</option></select>';
-                    }else if(data.trang_thai == 2){
-                        tt='<select id="tinhtrang1" name="'+data.ma_chuyen_bay+'"><option selected value="2">Chưa công bố(Có vé)</option><option value="3">Đã công bố</option></select>';
-                    }else if(data.trang_thai == 3){
-                        tt='<select ><option selected value="3">Đã công bố</option></select>';
-                    }else{
-                        tt='<select><option selected value="4">Đã cất cánh</option> <select>';
+                        if (sanbay.ma_san_bay == data.ma_san_bay_di) {
+                            noidi = sanbay.dia_diem;
+                            s = s + 1;
+                        }
+                        if (sanbay.ma_san_bay == data.ma_san_bay_den) {
+                            noiden = sanbay.dia_diem;
+                            s = s + 1;
+                        }
+                        if (s == 2) {
+                            return true;
+                        }
+                    });
+                    let tt = "";
+                    if (data.trang_thai == 1) {
+                        tt = '<select ><option selected value="1">Chưa công bố(chưa có vé)</option></select>';
+                    } else if (data.trang_thai == 2) {
+                        tt = '<select id="tinhtrang1" name="' + data.ma_chuyen_bay + '"><option selected value="2">Chưa công bố(Có vé)</option><option value="3">Đã công bố</option></select>';
+                    } else if (data.trang_thai == 3) {
+                        tt = '<select ><option selected value="3">Đã công bố</option></select>';
+                    } else {
+                        tt = '<select><option selected value="4">Đã cất cánh</option> <select>';
                     }
                     if ($row % 2 == 0) {
-                        
+
                         table1.append(`
                         <tr class="table-light">
                             
@@ -1040,7 +1049,7 @@ View::$activeItem = 'flight';
                                 </button>
                             </td>
                         </tr>`);
-                    } else { 
+                    } else {
                         table1.append(`
                         <tr class="table-info">
                             
@@ -1091,14 +1100,14 @@ View::$activeItem = 'flight';
             let data = {
                 macb: params
             };
-            $.post(`http://localhost/Software-Technology/flight/getFlight`, data, function(response) {
+            $.post(`<?= Config::get('URL') ?>flight/getFlight`, data, function(response) {
                 console.log(response);
                 if (response.thanhcong) {
-                    let noidi="";
-                    let noiden="";
-                    let s=0;
+                    let noidi = "";
+                    let noiden = "";
+                    let s = 0;
                     response.sanbay.forEach(sanbay => {
-                         if (sanbay.ma_san_bay == response.sanbaydi) {
+                        if (sanbay.ma_san_bay == response.sanbaydi) {
                             noidi = sanbay.dia_diem;
                             s = s + 1;
                         }
@@ -1106,19 +1115,19 @@ View::$activeItem = 'flight';
                             noiden = sanbay.dia_diem;
                             s = s + 1;
                         }
-                        if(s==2) {
+                        if (s == 2) {
                             return true;
                         }
                     });
                     let tt = "";
-                    if(response.tt==1){
-                        tt='Chưa công bố(chưa có vé)';
-                    }else if(response.tt == 2){
-                        tt='Chưa công bố(Có vé)';
-                    }else if(response.tt == 3){
-                        tt='Đã công bố';
-                    }else{
-                        tt='Đã cất cánh';
+                    if (response.tt == 1) {
+                        tt = 'Chưa công bố(chưa có vé)';
+                    } else if (response.tt == 2) {
+                        tt = 'Chưa công bố(Có vé)';
+                    } else if (response.tt == 3) {
+                        tt = 'Đã công bố';
+                    } else {
+                        tt = 'Đã cất cánh';
                     }
                     $("#view-macb").val(response.macb);
                     $("#view-tencb").val(response.tencb);
@@ -1141,7 +1150,7 @@ View::$activeItem = 'flight';
         //     let data = {
         //         email: params
         //     };
-        //     $.post(`http://localhost/Software-Technology/flight/resetPassword`, data, function(response) {
+        //     $.post(`<?= Config::get('URL') ?>flight/resetPassword`, data, function(response) {
         //         if (response.thanhcong) {
 
         //             Toastify({
@@ -1171,7 +1180,7 @@ View::$activeItem = 'flight';
             let data = {
                 macb: params
             };
-            $.post(`http://localhost/Software-Technology/flight/update`, data, function(response) {
+            $.post(`<?= Config::get('URL') ?>flight/update`, data, function(response) {
                 if (response.thanhcong) {
                     //alert(response.giobay);
                     $("#suamacb").val(response.macb);
@@ -1222,7 +1231,7 @@ View::$activeItem = 'flight';
                         // lấy dữ liệu từ form
 
                         const data = Object.fromEntries(new FormData(form).entries());
-                        $.post(`http://localhost/Software-Technology/flight/update`, data, function(response) {
+                        $.post(`<?= Config::get('URL') ?>flight/update`, data, function(response) {
                             console.log(response);
                             if (response.thanhcong) {
                                 currentPage = 1;
@@ -1263,9 +1272,9 @@ View::$activeItem = 'flight';
             $("#question-flight-modal").modal('toggle');
             $('#thuchien').off('click');
             $("#thuchien").click(function() {
-                $.post(`http://localhost/Software-Technology/flight/delete`, data, function(response) {
-                    
-                    if (response.thanhcong==0) {
+                $.post(`<?= Config::get('URL') ?>flight/delete`, data, function(response) {
+
+                    if (response.thanhcong == 0) {
                         Toastify({
                             text: "Xóa Thành Công",
                             duration: 1000,
@@ -1276,7 +1285,7 @@ View::$activeItem = 'flight';
                         }).showToast();
                         currentPage = 1;
                         layDSflightAjax();
-                    } else if(response.thanhcong==1){
+                    } else if (response.thanhcong == 1) {
                         Toastify({
                             text: "chuyến bay đã đủ số lượng khách hàng không thể xóa",
                             duration: 1000,
@@ -1285,7 +1294,7 @@ View::$activeItem = 'flight';
                             position: "center",
                             backgroundColor: "#FF6A6A",
                         }).showToast();
-                    }else if(response.thanhcong==2){
+                    } else if (response.thanhcong == 2) {
                         Toastify({
                             text: "chuyến bay đã cất cánh không thể xóa",
                             duration: 1000,
@@ -1294,8 +1303,7 @@ View::$activeItem = 'flight';
                             position: "center",
                             backgroundColor: "#FF6A6A",
                         }).showToast();
-                    }
-                    else if(response.thanhcong==3){
+                    } else if (response.thanhcong == 3) {
                         Toastify({
                             text: "Xóa thật bại",
                             duration: 1000,
@@ -1305,15 +1313,15 @@ View::$activeItem = 'flight';
                             backgroundColor: "#FF6A6A",
                         }).showToast();
                     } else {
-                        
+
                         $("#myModalLabel1101").text("Quản Lý chuyến bay");
                         $("#question1-model").text("Nếu xóa chuyến bay này bạn phải hoàn tiền cho khách hàng đã mua vé");
                         $("#question-flight1-modal").modal('toggle');
-                        
+
                         $('#thuchien1').off('click');
                         $("#thuchien1").click(function() {
-                            $.post(`http://localhost/Software-Technology/flight/delete1`, data, function(response) {
-                                if(response.thanhcong==1){
+                            $.post(`<?= Config::get('URL') ?>flight/delete1`, data, function(response) {
+                                if (response.thanhcong == 1) {
                                     Toastify({
                                         text: "Xóa thành công",
                                         duration: 1000,
@@ -1346,7 +1354,7 @@ View::$activeItem = 'flight';
         //         let data = {
         //             mahang: JSON.stringify(datas)
         //         };
-        //         $.post(`http://localhost/Software-Technology/flight/deletes`, data, function(response) {
+        //         $.post(`<?= Config::get('URL') ?>flight/deletes`, data, function(response) {
         //             console.log(response);
         //             if (response.thanhcong>0) {
         //                 Toastify({

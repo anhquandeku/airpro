@@ -15,11 +15,11 @@ class PromotionController extends Controller
         parent::__construct();
     }
 
-    public function promotion()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN01");
-        $this->View->render('promotion/promotion');
+        $this->View->render('promotion/index');
     }
 
     public function create(){

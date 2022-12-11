@@ -15,15 +15,16 @@ class WalletController extends Controller
         parent::__construct();
     }
 
-    public function wallet()
+    public function index()
     {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN11");
-        $this->View->render('wallet/wallet');
+        $this->View->render('wallet/index');
     }
-    
 
-    public function bankConnection(){
+
+    public function bankConnection()
+    {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN11");
         //$matknh = Request::post('matknh');
@@ -35,48 +36,54 @@ class WalletController extends Controller
         $this->View->renderJSON($response);
     }
 
-    public function topUp(){
+    public function topUp()
+    {
         $tien = Request::post('tien');
         $tk = Cookie::get('user_email');
-        $data = WalletModel::topUp($tien,$tk);
+        $data = WalletModel::topUp($tien, $tk);
         $response = [
             'thanhcong' => $data
         ];
         $this->View->renderJSON($response);
     }
 
-    public function withDraw(){
+    public function withDraw()
+    {
         $tien = Request::post('tien');
         $tk = Cookie::get('user_email');
-        $data = WalletModel::withDraw($tien,$tk);
+        $data = WalletModel::withDraw($tien, $tk);
         $response = [
             'thanhcong' => $data
         ];
         $this->View->renderJSON($response);
     }
 
-    public function payment(){
+    public function payment()
+    {
         $tien = Request::post('tien');
         $tk = Cookie::get('user_email');
-        $data = WalletModel::payMent($tien,$tk);
+        $data = WalletModel::payMent($tien, $tk);
         $response = [
             'thanhcong' => $data
         ];
         $this->View->renderJSON($response);
     }
 
-    public function paymentHistory(){
-        
+    public function paymentHistory()
+    {
     }
 
 
-    public function readPoint(){
+    public function readPoint()
+    {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN11");
         $point = WalletModel::getPoint(Cookie::get('user_email'));
         $hangs = WalletModel::getList();
-        foreach($hangs as $value){
-            if($point >= $value->muc_diem){
+        $rankNew = "";
+        $diemNew = "";
+        foreach ($hangs as $value) {
+            if ($point >= $value->muc_diem) {
                 $rank = $value->ten_hang;
             } else {
                 $rankNew = $value->ten_hang;
@@ -92,11 +99,12 @@ class WalletController extends Controller
         ];
         $this->View->renderJSON($response);
     }
-    public function checkConnection(){
+    public function checkConnection()
+    {
         Auth::checkAuthentication();
         //Auth::ktraquyen("CN11");
         $check = WalletModel::checkConnection(Cookie::get('user_matk'));
-        if($check != null){
+        if ($check != null) {
             $response = [
                 'thanhcong' => true,
                 'data' => $check
@@ -106,7 +114,7 @@ class WalletController extends Controller
                 'thanhcong' => false
             ];
         }
-        
+
         $this->View->renderJSON($response);
     }
 }

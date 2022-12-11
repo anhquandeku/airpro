@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\View;
+use App\Core\Config;
 
 View::$activeItem = 'index';
 
@@ -128,7 +129,7 @@ View::$activeItem = 'index';
     <script>
         let diadiemss;
         $(function() {
-            $.post(`http://localhost/Software-Technology/userticket/getAirports`, function(response) {
+            $.post(`<?= Config::get('URL')?>userticket/getAirports`, function(response) {
                 if (response.thanhcong) {
                     diadiems = response.data;
                     diadiems.forEach(data => {
@@ -188,7 +189,7 @@ View::$activeItem = 'index';
                     // lấy dữ liệu từ form
                     const data = Object.fromEntries(new FormData(form).entries());
 
-                    $.post(`http://localhost/Software-Technology/userticket/getList`, data, function(response) {
+                    $.post(`<?= Config::get('URL')?>userticket/getList`, data, function(response) {
                         if (response.thanhcong) {
                             currentPage = 1;
                             layDSVe();
