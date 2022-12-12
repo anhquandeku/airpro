@@ -131,4 +131,5 @@ class CustomerController extends Controller
         $data = CustomerModel::getListSearch($search, $search2,$page, $rowsPerPage);
         $this->View->renderJSON($data);
     }
+    
 }

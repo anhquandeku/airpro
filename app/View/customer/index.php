@@ -379,14 +379,19 @@ View::$activeItem = 'customer';
             getListCustomer(currentPage, searchText, filterText)
         })
 
+        //Hàm thay đổi trang
+        const changePage = (newPage) => {
+            currentPage = newPage;
+            getListCustomer(currentPage, searchText, filter);
+        }
+
         //Lấy danh sách khách hàng
         const getListCustomer = (currentPage, search, filter) => {
             const ajaxListCustomer = $.ajax({
-                url: `<?= Config::get('URL') ?>/customer/getListSearch?rowsPerPage=10&page=${currentPage}&search=${search}&search2=${filter}`,
+                url: `<?= Config::get('URL') ?>/customer/getListSearch?rowsPerPage=5&page=${currentPage}&search=${search}&search2=${filter}`,
                 type: 'get'
             });
             ajaxListCustomer.done((listCustomer) => {
-                console.log(listCustomer);
                 table.empty();
                 listCustomer.data.map((element, index) => {
                     let className = index % 2 ? 'table-light' : 'table-info'
@@ -394,6 +399,26 @@ View::$activeItem = 'customer';
                 })
                 let list = $('.list-checkbox');
                 list.hide();
+
+                //Phân trang
+                const pagination = $('#pagination');
+                pagination.empty();
+                if (listCustomer.totalPage > 1) {
+                    for (let i = 1; i <= listCustomer.totalPage; i++) {
+                        if (i == currentPage) {
+                            pagination.append(`
+                        <li class="page-item active">
+                            <button class="page-link" onClick='changePage(${i})'>${i}</button>
+                        </li>`)
+                        } else {
+                            pagination.append(`
+                        <li class="page-item">
+                            <button class="page-link" onClick='changePage(${i})'>${i}</button>
+                        </li>`)
+                        }
+
+                    }
+                }
             })
         }
 
@@ -489,8 +514,6 @@ View::$activeItem = 'customer';
                     }
                 });
             });
-
-
         }
         //Xem
 

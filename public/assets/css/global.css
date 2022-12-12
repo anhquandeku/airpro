@@ -19,3 +19,7 @@
 .table-responsive{
     overflow-x: hidden;
 }
+.lock-info{
+  color: #AAAAAA;
+  font-weight: 600;
+}

@@ -18,7 +18,7 @@ use App\Core\View;
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-item home<?= View::$activeItem == 'dashboard' ? 'active' : '' ?>">
+                <li class="sidebar-item <?= View::$activeItem == 'dashboard' ? 'active' : '' ?>">
                     <a href="<?= View::getBaseUrl() ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Trang chủ</span>

@@ -13,15 +13,14 @@ use App\Core\View;
     <title>Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= View::assets('css/bootstrap.css') ?>">
-    <link rel="stylesheet" href="<?= View::assets('vendors/bootstrap-icons/bootstrap-icons.css') ?>">
     <link rel="stylesheet" href="<?= View::assets('css/app.css') ?>">
     <link rel="stylesheet" href="<?= View::assets('css/pages/auth.css') ?>">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon')" />
 </head>
 
 <body>
     <div id="auth">
-
         <div class="row h-100">
             <div class="col-lg-6 col-12">
                 <div id="auth-left">
@@ -62,6 +61,9 @@ use App\Core\View;
     </div>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(function() {
             // Select form có name = login-form (giống như select bằng js thuần)
@@ -89,30 +91,25 @@ use App\Core\View;
                 submitHandler: function(form, event) {
                     event.preventDefault();
                     const data = Object.fromEntries(new FormData(form).entries());
-                    dangNhapAjax(data);
+                    console.log(data);
+                    $.ajax({
+                        url: `<?= Config::get('URL') ?>/auth/loginPost`,
+                        type: "POST",
+                        data: data
+                    }).done((response) => {
+                        console.log(response);
+                        if (!response['thanhcong']) {
+                            showToast(response['summary']);
+                        } else {
+                            showToast("Đăng nhập thành công");
+                            setTimeout(() => {
+                                window.location.href = `<?= Config::get('URL') ?>`
+                            }, 1000);
+                        }
+                    })
                 }
             });
 
-            function dangNhapAjax(data) {
-                $('#login-error').text("")
-                $('#login-error').addClass("d-none")
-                // dung ajax de submit 1 2 3
-                console.log(data);
-                $.ajax({
-                    url: `<?= Config::get('URL') ?>auth/loginPost`,
-                    type: "post",
-                    data: data,
-                    success: function(result) {
-                        if (!result['thanhcong']) {
-                            $('#login-error').text(result['summary'])
-                            $('#login-error').removeClass("d-none")
-                        } else {
-                            window.location.href = `<?= Config::get('URL') ?>`
-                        }
-
-                    }
-                });
-            }
         });
     </script>
 </body>

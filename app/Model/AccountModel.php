@@ -34,12 +34,13 @@ class AccountModel
         return null;
     }
 
-    public static function findHoTen($ma_cv,$ma_tk){
+    public static function findHoTen($ma_cv, $ma_tk)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
-        if($ma_cv == 'CV001'){
-            $sql = "SELECT ho_ten FROM `khach_hang` WHERE ma_tk = '".$ma_tk."'";
-        } else{
-            $sql = "SELECT ho_ten FROM `nhan_vien` WHERE ma_tk = '".$ma_tk."'";
+        if ($ma_cv == 'CV001') {
+            $sql = "SELECT ho_ten FROM `khach_hang` WHERE ma_tk = '" . $ma_tk . "'";
+        } else {
+            $sql = "SELECT ho_ten FROM `nhan_vien` WHERE ma_tk = '" . $ma_tk . "'";
         }
         $query = $database->prepare($sql);
         $query->execute();
@@ -49,7 +50,7 @@ class AccountModel
         return null;
     }
 
-    public static function create($email, $password, $macv,$ma)
+    public static function create($email, $password, $macv, $ma)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
@@ -59,7 +60,7 @@ class AccountModel
         $sql = "INSERT INTO tai_khoan(username, hash_password,ma_cv, trang_thai)
                 VALUES ( :email, :hashed_password,:macv, 1)";
         $query = $database->prepare($sql);
-        $query->execute([ ':macv' => $macv,':email' => $email, ':hashed_password' => $hashed_password]);
+        $query->execute([':macv' => $macv, ':email' => $email, ':hashed_password' => $hashed_password]);
         $count = $query->rowCount();
 
         $query2 = $database->prepare("SELECT ma_tk FROM tai_khoan WHERE username = :email LIMIT 1");
@@ -67,17 +68,24 @@ class AccountModel
         $result = $query2->fetch();
         $ma_tk = $result->ma_tk;
 
-
         $sql2 = "UPDATE nhan_vien SET ma_tk = 
-         :matk WHERE ma_nv = '".$ma."'";
+        :matk WHERE ma_nv = '" . $ma . "'";
+
+        if ($macv == 'CV001') {
+            $sql2 = "UPDATE khach_hang SET ma_tk = 
+            :matk WHERE ma_kh = '" . $ma . "'";
+        } 
+
         $query3 = $database->prepare($sql2);
-        $query3->execute([ ':matk' => $ma_tk]);
+        $query3->execute([':matk' => $ma_tk]);
+
+
         if ($count == 1) {
             return true;
         }
         return false;
     }
-    public static function create2($email, $password, $macv,$ma)
+    public static function create2($email, $password, $macv, $ma)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
@@ -87,7 +95,7 @@ class AccountModel
         $sql = "INSERT INTO tai_khoan(username, hash_password,ma_cv, trang_thai)
                 VALUES ( :email, :hashed_password,:macv, 1)";
         $query = $database->prepare($sql);
-        $query->execute([ ':macv' => $macv,':email' => $email, ':hashed_password' => $hashed_password]);
+        $query->execute([':macv' => $macv, ':email' => $email, ':hashed_password' => $hashed_password]);
         $count = $query->rowCount();
 
         $query2 = $database->prepare("SELECT ma_tk FROM tai_khoan WHERE username = :email LIMIT 1");
@@ -97,9 +105,9 @@ class AccountModel
 
 
         $sql2 = "UPDATE khach_hang SET ma_tk = 
-        :matk WHERE ma_kh = '".$ma."'";
+        :matk WHERE ma_kh = '" . $ma . "'";
         $query3 = $database->prepare($sql2);
-        $query3->execute([ ':matk' => $ma_tk]);
+        $query3->execute([':matk' => $ma_tk]);
         if ($count == 1) {
             return true;
         }
@@ -116,7 +124,7 @@ class AccountModel
         $sql = "INSERT INTO tai_khoan(username, hash_password,ma_cv, trang_thai)
                 VALUES ( :email, :hashed_password,:macv, 1)";
         $query = $database->prepare($sql);
-        $query->execute([ ':macv' => $macv,':email' => $email, ':hashed_password' => $hashed_password]);
+        $query->execute([':macv' => $macv, ':email' => $email, ':hashed_password' => $hashed_password]);
         $count = $query->rowCount();
 
         $query2 = $database->prepare("SELECT ma_tk FROM tai_khoan WHERE username = :email LIMIT 1");
@@ -124,35 +132,33 @@ class AccountModel
         $result = $query2->fetch();
         $ma_tk = $result->ma_tk;
 
-        
+
         $sql2 = "INSERT INTO khach_hang(ma_tk, ho_ten, email, trang_thai)
         VALUES ( :matk,:fullname, :email, 1)";
         $query3 = $database->prepare($sql2);
-        $query3->execute([ ':matk' => $ma_tk,':fullname' => $fullname, ':email' => $email]);
+        $query3->execute([':matk' => $ma_tk, ':fullname' => $fullname, ':email' => $email]);
         if ($count == 1) {
             return true;
         }
         return false;
     }
 
-    public static function forgotPassword($email){
+    public static function forgotPassword($email)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
-        
-        $integer_part = mt_rand(100000, 999999 - 1);
-            $to      = $email;
-            $subject = "Mã xác thực";
-            $message = $integer_part;
-            
-            $success = mail ($to,$subject,$message);
 
-            if( $success == true )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            };
+        $integer_part = mt_rand(100000, 999999 - 1);
+        $to      = $email;
+        $subject = "Mã xác thực";
+        $message = $integer_part;
+
+        $success = mail($to, $subject, $message);
+
+        if ($success == true) {
+            return true;
+        } else {
+            return false;
+        };
     }
 
     public static function update($email,  $fullname, $maquyen)
@@ -173,11 +179,11 @@ class AccountModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql1 = "SELECT trang_thai FROM `tai_khoan` WHERE username = :email LIMIT 1";
-        
+
         $query = $database->prepare($sql1);
         $query->execute([':email' => $email]);
         $tt = $query->fetch();
-        if($tt->trang_thai == 1){
+        if ($tt->trang_thai == 1) {
             $sql2 = "UPDATE `tai_khoan` SET trang_thai = 0  WHERE username = :email";
         } else {
             $sql2 = "UPDATE `tai_khoan` SET trang_thai = 1  WHERE username = :email";
@@ -209,7 +215,8 @@ class AccountModel
         return true;
     }
 
-    public static function getGV(){
+    public static function getGV()
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = 'SELECT * FROM `user` WHERE MaQuyen = "Q02"';
         $query = $database->query($sql);
@@ -221,7 +228,6 @@ class AccountModel
             return $data;
         }
         return null;
-
     }
 
     public static function getAllPagination($search = null, $page = 1, $rowsPerPage = 10)
@@ -312,7 +318,7 @@ class AccountModel
         }
 
         $count = 'SELECT COUNT(ma_tk) FROM tai_khoan';
-            $count .= ' WHERE (username LIKE :search OR ma_tk LIKE :search)';
+        $count .= ' WHERE (username LIKE :search OR ma_tk LIKE :search)';
 
         $countQuery = $database->prepare($count);
         $countQuery->bindValue(':search', $search, PDO::PARAM_STR);
@@ -328,7 +334,8 @@ class AccountModel
         return $response;
     }
 
-    public static function getID(){
+    public static function getID()
+    {
         $id = Cookie::get('user_email');
         $quyen = Cookie::get('user_quyen');
         $response = [
@@ -338,7 +345,8 @@ class AccountModel
         return $response;
     }
 
-    public static function changePassword($id, $pass){
+    public static function changePassword($id, $pass)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
         $hashed_password = password_hash($pass, PASSWORD_BCRYPT);
         $sql = "UPDATE tai_khoan SET hash_password = :hashed_password WHERE username = :id";
@@ -358,6 +366,6 @@ class AccountModel
         $query = $database->prepare($sql);
         $query->execute();
         $count = $query->rowCount();
-        echo('Created ' . $count);
+        echo ('Created ' . $count);
     }
 }

@@ -21,6 +21,7 @@ View::$activeItem = 'account';
     <link rel="shortcut icon" href="<?= View::assets('images/favicon.ico') ?>" type="image/x-icon" />
     <link rel="stylesheet" href="<?= View::assets('css/quan.css') ?>" />
     <link rel="stylesheet" href="<?= View::assets('css/global.css') ?>" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
 </head>
 
@@ -54,10 +55,7 @@ View::$activeItem = 'account';
                             </div>
                             <div class="col-6 col-md-5 order-md-2 order-first">
                                 <div class=" loat-start float-lg-end mb-3">
-                                    <button id='btn-delete-user' class="btn btn-danger">
-                                        <i class="bi bi-trash-fill"></i> Khóa tài khoản
-                                    </button>
-                                    <button id='btn-createaccount' class="btn btn-primary">
+                                    <button id='btn-createaccount' class="btn btn-primary" onclick="loadFormAdd()">
                                         <i class="bi bi-plus"></i> Thêm tài khoản
                                     </button>
                                 </div>
@@ -81,7 +79,7 @@ View::$activeItem = 'account';
                                     <table class="table mb-0 table-danger" id="table1">
                                         <thead>
                                             <tr>
-                                                <th>Chọn</th>
+                                                <th>Mã</th>
                                                 <th>Tên Đăng Nhập</th>
                                                 <th>Chức vụ</th>
                                                 <th>Tác Vụ</th>
@@ -144,10 +142,9 @@ View::$activeItem = 'account';
                     </div>
                 </div> -->
 
-                <div class="modal fade text-left" id="phancong-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+                <div class="modal fade text-left" id="add-user-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
                     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
                         <div class="modal-content">
-
                             <div class="modal-header bg-primary">
                                 <div class="col-sm-1 offset-11" style="padding-left: 30px; padding-bottom: 38px;">
                                     <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal" style="padding-top: 5px;">
@@ -166,9 +163,9 @@ View::$activeItem = 'account';
                                             <label>
                                                 <h6 style="margin-left: 50px; margin-right: 10px;"> Tạo tài khoản cho:</h6>
                                             </label>
-                                            <select class="btn btn btn-primary" name="pc-cbb" id="cars-pc">
-                                                <option value="staff">Nhân viên</option>
-                                                <option value="customer">Khách hàng</option>
+                                            <select class="btn btn btn-primary" name="pc-cbb" id="select-position">
+                                                <option value="CV002">Nhân viên</option>
+                                                <option value="CV001">Khách hàng</option>
                                             </select>
                                         </div>
                                     </div>
@@ -177,7 +174,7 @@ View::$activeItem = 'account';
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="table mb-0 table-danger" id="table2">
+                                                <table class="table mb-0 table-danger" id="table-customer">
                                                     <thead>
                                                         <tr>
                                                             <th>Mã</th>
@@ -309,7 +306,9 @@ View::$activeItem = 'account';
             </div>
         </div>
     </div>
-
+    =
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?= View::assets('js/globalFunctions.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
     <script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
     <script src="<?= View::assets('js/main.js') ?>"></script>
@@ -329,6 +328,14 @@ View::$activeItem = 'account';
         const table = $('#table1 > tbody'); //Bảng dữ liệu
         const filterPosition = $('#filter-user'); //Thanh lọc 
 
+        //Bảng người dùng
+        const tableCustomer = $('#table-customer > tbody');
+        let quyens;
+        // on ready
+        $(function() {
+            getListUser(currentPage, '', 0);
+        });
+
         //Sự kiện tìm kiếm
         search.on('input', (event) => {
             searchText = event.target.value;
@@ -340,12 +347,6 @@ View::$activeItem = 'account';
             getListUser(currentPage, searchText, filter)
         })
 
-        let quyens;
-        // on ready
-        $(function() {
-            getListUser(currentPage, '', 0);
-        });
-
         //Hàm thay đổi trang
         const changePage = (newPage) => {
             currentPage = newPage;
@@ -355,12 +356,13 @@ View::$activeItem = 'account';
 
         //Lấy danh sách user
         const getListUser = (currentPage, search, filter) => {
-            console.log(currentPage, search, filter);
+            //Api lấy danh sách user
             const ajaxListUser = $.ajax({
                 url: `<?= Config::get('URL') ?>/account/advancedSearch?rowsPerPage=10&page=${currentPage}&search=${search}`,
                 type: 'get'
             });
 
+            //Api lấy danh sách chức vụ
             const ajaxPosition = $.ajax({
                 url: `<?= Config::get('URL') ?>/position/getPositions`,
                 type: 'get'
@@ -369,23 +371,21 @@ View::$activeItem = 'account';
             $.when(ajaxListUser, ajaxPosition).done((listUser, listPosition) => {
                 const user = listUser[0] ? listUser[0] : [];
                 const position = listPosition[0] ? listPosition[0] : [];
-                let dataUser = [...user.data];
-                if (filter != 0) dataUser = dataUser.filter(item => item.ma_cv == filter);
-                table.empty();
-                dataUser.map((element, index) => {
-
-                    if (index % 2) {
-                        table.append(dataTable(element.ma_tk, element.username, position.data.filter(item => item.ma_chuc_vu == element.ma_cv)[0].ten_chuc_vu, 'table-light'));
-                    } else {
-                        table.append(dataTable(element.ma_tk, element.username, position.data.filter(item => item.ma_chuc_vu == element.ma_cv)[0].ten_chuc_vu, 'table-info'));
-                    }
-                })
-                
+                let dataUser = filter != 0 ? user.data.filter(item => item.ma_cv == filter) : user.data;
                 filterPosition.empty();
+                quyens = position.data;
+                table.empty();
+
+                dataUser.map((element, index) => {
+                    let className = index % 2 ? 'table-light' : 'table-info'
+                    table.append(dataTable(element.ma_tk, element.username, position.data.filter(item => item.ma_chuc_vu == element.ma_cv)[0].ten_chuc_vu, className, element.trang_thai));
+
+                })
+
                 filterPosition.append(`<option value = 0> Tất cả </option>`);
                 position.data.map((element, index) => {
-                    if (element.ma_chuc_vu === filter) $("#filter-user").append(`<option value="${element.ma_chuc_vu}" selected>${element.ten_chuc_vu}</option>`);
-                    else $("#filter-user").append(`<option value="${element.ma_chuc_vu}">${element.ten_chuc_vu}</option>`);
+                    let selected = element.ma_chuc_vu === filter ? 'selected' : ''
+                    $("#filter-user").append(`<option value="${element.ma_chuc_vu}" ${selected}>${element.ten_chuc_vu}</option>`);
                 });
 
                 //Phân trang
@@ -410,530 +410,91 @@ View::$activeItem = 'account';
             })
         }
 
-
-
-        //Các sự kiện: 
-        $("#open-add-user-btn").click(function() {
-            $('#email').val("");
-            $('#password').val("");
-            $('#maquyen').val("");
-            $('#fullname').val("");
-            $("#add-user-modal").modal('toggle')
-        });
-
-        $("#btn-createaccount").click(function() {
-            $("#phancong-modal").modal('toggle');
-            currentPage = 1;
-            getListAjax();
-        });
-
-        $('#cars-pc').change(function() {
-            currentPage = 1;
-            getListAjax();
-        });
-
-        function addTK(ma, mail, hoten) {
-            $("#phancong-modal").modal('toggle');
-            $("#add-user-modal").modal('toggle');
-            // Đặt sự kiện validate cho modal add user
-            $("form[name='add-user-form']").validate({
-                rules: {
-                    password: {
-                        required: true,
-                        minlength: 8,
-                    },
-                },
-                messages: {
-                    password: {
-                        required: "Vui lòng nhập mật khẩu",
-                        minlength: "Mật khẩu của bạn không được ngắn hơn 8 ký tự",
-                    },
-                },
-                submitHandler: function(form, event) {
-                    event.preventDefault();
-                    // lấy dữ liệu từ form
-                    const data = Object.fromEntries(new FormData(form).entries());
-                    data['email'] = mail;
-                    data['fullname'] = hoten;
-                    data['ma'] = ma;
-
-                    $.post(`<?= Config::get('URL') ?>/account/create`, data, function(response) {
-                        if (response.thanhcong) {
-                            currentPage = 1;
-                            layDSUserAjax();
-                            Toastify({
-                                text: "Thêm Thành Công",
-                                duration: 1000,
-                                close: true,
-                                gravity: "top",
-                                position: "center",
-                                backgroundColor: "#4fbe87",
-                            }).showToast();
-                        } else {
-                            Toastify({
-                                text: "Thêm Thất Bại",
-                                duration: 1000,
-                                close: true,
-                                gravity: "top",
-                                position: "center",
-                                backgroundColor: "#FF6A6A",
-                            }).showToast();
-                        }
-
-                        // Đóng modal
-                        $("#add-user-modal").modal('toggle')
-                    });
-                    $('#email').val("");
-                    $('#password').val("");
-                    $('#maquyen').val("");
-                    $('#fullname').val("");
-                }
-            })
-        }
-
-        function addTKKH(ma, mail, hoten) {
-            $("#phancong-modal").modal('toggle');
-            $("#add-user-modal").modal('toggle');
-            // Đặt sự kiện validate cho modal add user
-            $("form[name='add-user-form']").validate({
-                rules: {
-                    password: {
-                        required: true,
-                        minlength: 8,
-                    },
-                },
-                messages: {
-                    password: {
-                        required: "Vui lòng nhập mật khẩu",
-                        minlength: "Mật khẩu của bạn không được ngắn hơn 8 ký tự",
-                    },
-                },
-                submitHandler: function(form, event) {
-                    event.preventDefault();
-                    // lấy dữ liệu từ form
-                    const data = Object.fromEntries(new FormData(form).entries());
-                    data['email'] = email;
-                    data['fullname'] = hoten;
-                    data['ma'] = ma;
-
-                    $.post(`<?= Config::get('URL') ?>/account/create2`, data, function(response) {
-                        if (response.thanhcong) {
-                            currentPage = 1;
-                            layDSUserAjax();
-                            Toastify({
-                                text: "Thêm Thành Công",
-                                duration: 1000,
-                                close: true,
-                                gravity: "top",
-                                position: "center",
-                                backgroundColor: "#4fbe87",
-                            }).showToast();
-                        } else {
-                            Toastify({
-                                text: "Thêm Thất Bại",
-                                duration: 1000,
-                                close: true,
-                                gravity: "top",
-                                position: "center",
-                                backgroundColor: "#FF6A6A",
-                            }).showToast();
-                        }
-
-                        // Đóng modal
-                        $("#add-user-modal").modal('toggle')
-                    });
-                    $('#email').val("");
-                    $('#password').val("");
-                    $('#maquyen').val("");
-                    $('#fullname').val("");
-                }
-            })
-        }
-
-
-
-
-
-
-        // $("#search-user-form").keyup(debounce(function() {
-        //     currentPage = 1;
-        //     layDSUserSearch($('#serch-user-text').val());
-        // }, 200));
-
-
-        function layDSUserAjax() {
-            $.get(`<?= Config::get('URL') ?>/account/getAccount?rowsPerPage=10&page=${currentPage}`, function(response) {
-                const table1 = $('#table1 > tbody');
-                table1.empty();
-                checkedRows = [];
-                $row = 0;
-                response.data.forEach(data => {
-                    let disabled = "disabled btn icon icon-left btn-secondary";
-                    let tenQuyen = "";
-                    quyens.forEach(quyen => {
-                        if (quyen.ma_chuc_vu == data.ma_cv) {
-                            tenQuyen = quyen.ten_chuc_vu;
-                            return true;
-                        }
-                    });
-                    if ($row % 2 == 0) {
-                        let bibi = "bi bi-lock";
-                        if (data.trang_thai == 0) {
-                            bibi = "bi bi-unlock";
-                        }
-
-                        table1.append(`
-                        <tr class="table-light">
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="form-check-input form-check-success form-check-glow" id="${data.ma_tk}">
-                                </div>
-                            </td>
-                            <td>${data.username}</td>
-                            <td>${tenQuyen}</td>
-                            <td>
-                                <button onclick="viewRow('${data.username}')" type="button" class="btn btn-sm btn-outline-primary" style="padding-top: 3px; padding-bottom: 4px;">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button onclick="deleteRow('${data.username}')" type="button" class="btn btn-sm btn-outline-danger" style="padding-top: 7px; padding-bottom: 0px;">
-                                    <i class="${bibi}"></i>
-                                </button>
-                            </td>
-                        </tr>`);
-                    } else {
-                        let bibi = "bi bi-lock";
-                        if (data.trang_thai == 0) {
-                            bibi = "bi bi-unlock";
-                        }
-                        table1.append(`
-                        <tr class="table-light">
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="form-check-input form-check-success form-check-glow" id="${data.ma_tk}">
-                                </div>
-                            </td>
-                            <td>${data.username}</td>
-                            <td>${tenQuyen}</td>
-                            <td>
-                                <button onclick="viewRow('${data.username}')" type="button" class="btn btn-sm btn-outline-primary" style="padding-top: 3px; padding-bottom: 4px;">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button onclick="deleteRow('${data.username}')" type="button" class="btn btn-sm btn-outline-danger" style="padding-top: 7px; padding-bottom: 0px;">
-                                    <i class="${bibi}"></i>
-                                </button>
-                            </td>
-                        </tr>`);
-                    }
-                    checkedRows.push(data.username);
-                    $row += 1;
-                });
-
-                const pagination = $('#pagination');
-                // Xóa phân trang cũ
-                pagination.empty();
-                if (response.totalPage > 1) {
-                    for (let i = 1; i <= response.totalPage; i++) {
-                        if (i == currentPage) {
-                            pagination.append(`
-                        <li class="page-item active">
-                            <button class="page-link" onClick='changePage(${i})'>${i}</button>
-                        </li>`)
-                        } else {
-                            pagination.append(`
-                        <li class="page-item">
-                            <button class="page-link" onClick='changePage(${i})'>${i}</button>
-                        </li>`)
-                        }
-
-                    }
-                }
-
-            });
-        }
-
-        function layDSUserSearch(search) {
-            $.get(`<?= Config::get('URL') ?>/account/advancedSearch?rowsPerPage=10&page=${currentPage}&search=${search}`, function(response) {
-                const table1 = $('#table1 > tbody');
-                table1.empty();
-                checkedRows = [];
-                $row = 0;
-                response.data.forEach(data => {
-                    let disabled = "disabled btn icon icon-left btn-secondary";
-                    let tenQuyen = "";
-                    quyens.forEach(quyen => {
-                        if (quyen.ma_chuc_vu == data.ma_cv) {
-                            tenQuyen = quyen.ten_chuc_vu;
-                            return true;
-                        }
-                    });
-                    if ($row % 2 == 0) {
-                        let bibi = "bi bi-lock";
-                        if (data.trang_thai == 0) {
-                            bibi = "bi bi-unlock";
-                        }
-
-                        table1.append(`
-                        <tr class="table-light">
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="form-check-input form-check-success form-check-glow" id="${data.ma_tk}">
-                                </div>
-                            </td>
-                            <td>${data.username}</td>
-                            <td>${tenQuyen}</td>
-                            <td>
-                                <button onclick="viewRow('${data.username}')" type="button" class="btn btn-sm btn-outline-primary" style="padding-top: 3px; padding-bottom: 4px;">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button onclick="deleteRow('${data.username}')" type="button" class="btn btn-sm btn-outline-danger" style="padding-top: 7px; padding-bottom: 0px;">
-                                    <i class="${bibi}"></i>
-                                </button>
-                            </td>
-                        </tr>`);
-                    } else {
-                        let bibi = "bi bi-lock";
-                        if (data.trang_thai == 0) {
-                            bibi = "bi bi-unlock";
-                        }
-                        table1.append(`
-                        <tr class="table-light">
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="form-check-input form-check-success form-check-glow" id="${data.ma_tk}">
-                                </div>
-                            </td>
-                            <td>${data.username}</td>
-                            <td>${tenQuyen}</td>
-                            <td>
-                                <button onclick="viewRow('${data.username}')" type="button" class="btn btn-sm btn-outline-primary" style="padding-top: 3px; padding-bottom: 4px;">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button onclick="deleteRow('${data.username}')" type="button" class="btn btn-sm btn-outline-danger" style="padding-top: 7px; padding-bottom: 0px;">
-                                    <i class="${bibi}"></i>
-                                </button>
-                            </td>
-                        </tr>`);
-                    }
-                    checkedRows.push(data.username);
-                    $row += 1;
-                });
-
-                const pagination = $('#pagination');
-                // Xóa phân trang cũ
-                pagination.empty();
-                if (response.totalPage > 1) {
-                    for (let i = 1; i <= response.totalPage; i++) {
-                        if (i == currentPage) {
-                            pagination.append(`
-                        <li class="page-item active">
-                            <button class="page-link" onClick='changePageSearch(${i},${search})'>${i}</button>
-                        </li>`)
-                        } else {
-                            pagination.append(`
-                        <li class="page-item">
-                            <button class="page-link" onClick='changePageSearch(${i},${search})'>${i}</button>
-                        </li>`)
-                        }
-
-                    }
-                }
-
-            });
-        }
-
-        function viewRow(params) {
-            let data = {
-                email: params
-            };
-            $.post(`<?= Config::get('URL') ?>/account/viewUser`, data, function(response) {
-                if (response.thanhcong) {
-                    $("#view-hoten").val(response.ma_tk);
-                    $("#view-ms").val(response.username);
-                    let tenQuyen = "";
-                    quyens.forEach(quyen => {
-                        if (quyen.ma_chuc_vu == response.ma_cv) {
-                            tenQuyen = quyen.ten_chuc_vu;
-                            return true;
-                        }
-                    });
-                    $("#view-quyen").val(tenQuyen);
-                }
-            });
-            $("#view-user-modal").modal('toggle');
-        }
-
-        function resetPass(params) {
-            let data = {
-                email: params
-            };
-            $.post(`<?= Config::get('URL') ?>/user/resetPassword`, data, function(response) {
-                if (response.thanhcong) {
-
-                    Toastify({
-                        text: "Khôi Phục Thành Công",
-                        duration: 1000,
-                        close: true,
-                        gravity: "top",
-                        position: "center",
-                        backgroundColor: "#4fbe87",
-                    }).showToast();
-                    $("#reset" + params).removeClass("btn-primary");
-                    $("#reset" + params).addClass("disabled icon icon-left btn-secondary");
-                } else {
-                    Toastify({
-                        text: "Khôi Phục Thất Bại",
-                        duration: 1000,
-                        close: true,
-                        gravity: "top",
-                        position: "center",
-                        backgroundColor: "#FF6A6A",
-                    }).showToast();
-                }
-            });
-        }
-
-        function repairRow(params) {
-            let data = {
-                email: params
-            };
-
-            $.post(`<?= Config::get('URL') ?>/user/viewUser`, data, function(response) {
-                if (response.thanhcong) {
-                    $('#re-email').val(response.TenDangNhap);
-                    $('#cars-quyen-sua').val(response.MaQuyen).prop('selected', true);
-                    $('#re-fullname').val(response.FullName);
-                }
-            });
-            $("#repair-user-modal").modal('toggle');
-            //Sua form
-            $("form[name='repair-user-form']").validate({
-                rules: {
-                    fullname: {
-                        required: true,
-                        validateName: true,
-                    }
-                },
-                messages: {
-                    fullname: {
-                        required: "Vui lòng nhập họ tên",
-                    }
-                },
-                submitHandler: function(form, event) {
-                    event.preventDefault();
-                    $("#myModalLabel110").text("Quản Lý Tài Khoản");
-                    $("#question-model").text("Bạn có chắc chắn muốn sửa tài khoản này không");
-                    $("#question-user-modal").modal('toggle');
-                    $('#thuchien').off('click')
-                    $("#thuchien").click(function() {
-                        // lấy dữ liệu từ form
-                        const data = Object.fromEntries(new FormData(form).entries());
-                        data['email'] = $('#re-email').val();
-                        $.post(`<?= Config::get('URL') ?>/user/repairUser`, data, function(response) {
-                            if (response.thanhcong) {
-                                currentPage = 1;
-                                layDSUserAjax();
-                                Toastify({
-                                    text: "Sửa Thành Công",
-                                    duration: 1000,
-                                    close: true,
-                                    gravity: "top",
-                                    position: "center",
-                                    backgroundColor: "#4fbe87",
-                                }).showToast();
-                            } else {
-                                Toastify({
-                                    text: "Sửa Thất Bại",
-                                    duration: 1000,
-                                    close: true,
-                                    gravity: "top",
-                                    position: "center",
-                                    backgroundColor: "#FF6A6A",
-                                }).showToast();
-                            }
-
-                            // Đóng modal
-                            $("#repair-user-modal").modal('toggle')
-                        });
-                    });
-                }
-            })
-        }
-
-        function deleteRow(params) {
-            let data = {
-                email: params
-            };
-            $("#myModalLabel110").text("Quản Lý Tài Khoản");
-            $("#question-model").text("Bạn có chắc chắn muốn khóa tài khoản này không");
-            $("#question-user-modal").modal('toggle');
-            $('#thuchien').off('click');
-            $("#thuchien").click(function() {
-                $.post(`<?= Config::get('URL') ?>/account/delete`, data, function(response) {
-                    if (response.thanhcong) {
-                        Toastify({
-                            text: "Khóa Thành Công",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#4fbe87",
-                        }).showToast();
-                        currentPage = 1;
-                        layDSUserAjax();
-                    } else {
-                        Toastify({
-                            text: "Khóa Thất Bại",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#FF6A6A",
-                        }).showToast();
-                    }
-                });
-            });
-
-        }
-        $("#btn-delete-user").click(function() {
-            $("#myModalLabel110").text("Quản Lý Tài Khoản");
-            $("#question-model").text("Bạn có chắc chắn muốn khóa những tài khoản này không");
-            $("#question-user-modal").modal('toggle');
+        //Khóa tài khoản
+        const lockAccount = (id, action) => {
+            $('#question-user-modal').modal('toggle');
+            $("#myModalLabel110").text(action ? 'Khóa tài khoản' : 'Mở khóa tài khoản')
+            $('#question-model').text(action ? 'Tài khoản này sẽ bị khóa?' : 'Tài khoản này sẽ được mở?');
             $('#thuchien').off('click')
-            $("#thuchien").click(function() {
-                let datas = []
-                checkedRows.forEach(checkedRow => {
-                    if ($('#' + checkedRow).prop("checked")) {
-                        datas.push(checkedRow);
-                    }
-                });
-                let data = {
-                    emails: JSON.stringify(datas)
-                };
-                $.post(`<?= Config::get('URL') ?>/account/deletes`, data, function(response) {
-                    if (response.thanhcong) {
-                        Toastify({
-                            text: "Khóa Thành Công",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#4fbe87",
-                        }).showToast();
-                        currentPage = 1;
-                        layDSUserAjax();
-                    } else {
-                        Toastify({
-                            text: "Khóa Thất Bại",
-                            duration: 1000,
-                            close: true,
-                            gravity: "top",
-                            position: "center",
-                            backgroundColor: "#FF6A6A",
-                        }).showToast();
-                    }
-                });
-            });
-        });
+            $('#thuchien').click(() => {
+                handleLockAccount(id, action);
+            })
+        }
+
+        const handleLockAccount = (id, action) => {
+            let data = {
+                email: id
+            }
+            $.post(`<?= Config::get('URL') ?>/account/delete`, data, (response) => {
+                if (response.thanhcong) {
+                    showToast(action ? "Khóa thành công" : "Mở khóa thành công");
+                    getListUser(1, '', 0);
+                } else {
+                    showToast(action ? "Khóa thành thất bại" : "Mở khóa thất bại");
+                }
+            })
+        }
+
+        //Thêm tài khoản
+
+        /**Load form */
+        const loadFormAdd = () => {
+            $("#add-user-modal").modal('toggle');
+            getListStaff();
+            $('#select-position').change((event) => {
+                if (event.target.value == 'CV001') {
+                    getListCustomer();
+                } else {
+                    getListStaff();
+                }
+            })
+
+        }
+
+        const getListCustomer = () => {
+            $.ajax({
+                url: `<?= Config::get('URL') ?>/customer/getListSearch?rowsPerPage=10&page=1&search&search2=0`,
+                type: 'get'
+            }).done((response) => {
+                tableCustomer.empty();
+                response.data && response.data.map((element, index) => {
+                    let className = index % 2 ? 'table-light' : 'table-info'
+                    if (!element.ma_tk) tableCustomer.append(addTableCustomer(element, className));
+                })
+
+            })
+        }
+
+        const getListStaff = () => {
+            $.ajax({
+                url: `<?= Config::get('URL') ?>/staff/getList`,
+                type: 'get'
+            }).done((response) => {
+                console.log(response);
+                tableCustomer.empty();
+                response.data && response.data.map((element, index) => {
+                    let className = index % 2 ? 'table-light' : 'table-info'
+                    if (!element.ma_tk) tableCustomer.append(addTableStaff(element, className));
+                })
+            })
+        }
+
+        /** Thêm  */
+        const createAccount = (ma, ho_ten, email) => {
+            let data = {
+                ma: ma,
+                password: email,
+                email: email,
+                maquyen: $('#select-position').val(),
+            }
+            $.post(`<?= Config::get('URL') ?>/account/create`, data, (response) => {
+                if (response.thanhcong) {
+                    showToast('Tạo tài khoản thành công');
+                    loadFormAdd();
+                    getListUser(1, '', 0);
+                }
+            })
+        }
     </script>
 </body>
 

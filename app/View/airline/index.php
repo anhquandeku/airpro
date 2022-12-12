@@ -389,7 +389,7 @@ View::$activeItem = 'airline';
         //Lọc theo chức vụ
         filter.change((event) => {
             filterText = event.target.value;
-            getListUser(currentPage, searchText, filterText)
+            getListAirline(currentPage, searchText, filterText)
         })
         //Lấy danh sách hãng hàng không
         const getListAirline = (currentPage, search, filter) => {

@@ -33,12 +33,11 @@ class AuthController extends Controller
         ];
         // Kiểm tra email có tồn tại không
         $user = AccountModel::findOneByEmailLogin($email);
-        
         if (!$user) {
             $result['thanhcong'] = false;
             $result['summary'] = 'Tên đăng nhập hoặc mật khẩu không chính xác';
             return $this->View->renderJSON($result);
-        } 
+        }
 
 
         // Kiểm tra password
@@ -48,21 +47,23 @@ class AuthController extends Controller
             $result['summary'] = 'Tên đăng nhập hoặc mật khẩu không chính xác';
             return $this->View->renderJSON($result);
         }
-        
+
         // Kiểm tra tài khoản hoạt động
-        if($user->trang_thai == 0){
+        if ($user->trang_thai == 0) {
             $result['thanhcong'] = false;
             $result['summary'] = 'Tài khoản đã bị khóa';
             return $this->View->renderJSON($result);
         }
 
-        // Cookie::set('user_id', $user->id);
-        $ho_ten = AccountModel::findHoTen($user->ma_cv,$user->ma_tk);
+        $ho_ten = AccountModel::findHoTen($user->ma_cv, $user->ma_tk);
+        
+        Cookie::set('user_id', $user->ma_tk);
         Cookie::set('user_fullname', $ho_ten->ho_ten);
         Cookie::set('user_email', $user->username);
-        Cookie::set('user_quyen',$user->ma_cv);
-        Cookie::set('user_matk',$user->ma_tk);
+        Cookie::set('user_quyen', $user->ma_cv);
+        Cookie::set('user_matk', $user->ma_tk);
         Cookie::set('user_logged_in', true);
+
         // can set them nhung cái cần
         return $this->View->renderJSON($result);
     }
@@ -86,7 +87,7 @@ class AuthController extends Controller
         $password = Request::post('password');
         $fullname = Request::post('fullname');
         $maquyen = Request::post('maquyen');
-        AccountModel::create($email, $password, $fullname,$maquyen);
+        AccountModel::create($email, $password, $fullname, $maquyen);
         Redirect::to('auth/login');
     }
 

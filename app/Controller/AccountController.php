@@ -133,6 +133,7 @@ class AccountController extends Controller
         $response = ['thanhcong' => false];
         if ($kq == null) {
             $response['thanhcong'] = false;
+            $response['mail'] = $email;
         } else {
             $response['ma_tk'] = $kq->ma_tk;
             $response['username'] = $kq->username;
