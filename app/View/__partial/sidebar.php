@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Cookie;
 use App\Core\View;
 
 ?>
@@ -8,8 +9,7 @@ use App\Core\View;
         <div class="sidebar-header">
             <div class="d-flex justify-content-center">
                 <div class="logo">
-                    <a href="index.html"><img src="<?= View::assets('images/logo/logo.jpeg') ?>" alt="Logo"
-                            srcset="" /></a>
+                    <a href="index.html"><img src="<?= View::assets('images/logo/logo.jpeg') ?>" alt="Logo" srcset="" /></a>
                 </div>
                 <div class="toggler">
                     <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -18,13 +18,13 @@ use App\Core\View;
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-item <?= View::$activeItem == 'dashboard' ? 'active' : '' ?>">
+                <li class="sidebar-item home<?= View::$activeItem == 'dashboard' ? 'active' : '' ?>">
                     <a href="<?= View::getBaseUrl() ?>" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Trang chủ</span>
                     </a>
                 </li>
-                <li id="CN13" class=" sidebar-item  <?= View::$activeItem == 'index' ? 'active' : '' ?>">
+                <li id="CN13" class=" sidebar-item CV001 <?= View::$activeItem == 'index' ? 'active' : '' ?>">
                     <a href="<?= View::url('userticket/index') ?>" class="sidebar-link">
                         <i class="bi bi-cast"></i>
                         <span>Đặt vé</span>
@@ -90,7 +90,7 @@ use App\Core\View;
                         <span>Nhân viên</span>
                     </a>
                 </li>
-                <li id="CN11" class=" sidebar-item  <?= View::$activeItem == 'wallet' ? 'active' : '' ?>">
+                <li id="CN11" class=" sidebar-item  CV001 <?= View::$activeItem == 'wallet' ? 'active' : '' ?>">
                     <a href="<?= View::url('wallet/') ?>" class="sidebar-link">
                         <i class="bi bi-wallet2"></i>
                         <span>Ví Airpro</span>
@@ -108,25 +108,6 @@ use App\Core\View;
                         <span>Thống kê</span>
                     </a>
                 </li>
-                
-                <li id="CN14" class=" sidebar-item  <?= View::$activeItem == 'sale' ? 'active' : '' ?>">
-                    <a href="<?= View::url('userticket/sale') ?>" class="sidebar-link">
-                        <i class="bi bi-lightning"></i>
-                        <span>Săn vé giá rẻ</span>
-                    </a>
-                </li>
-                <li id="CN15" class=" sidebar-item  <?= View::$activeItem == 'auto' ? 'active' : '' ?>">
-                    <a href="<?= View::url('userticket/auto') ?>" class="sidebar-link">
-                        <i class="bi bi-broadcast"></i>
-                        <span>Mua vé tự động</span>
-                    </a>
-                </li>
-                <li id="CN16" class=" sidebar-item  <?= View::$activeItem == 'ticketuser' ? 'active' : '' ?>">
-                    <a href="<?= View::url('userticket/ticket') ?>" class="sidebar-link">
-                        <i class="bi bi-cash"></i>
-                        <span>Kho vé của tôi</span>
-                    </a>
-                </li>
             </ul>
         </div>
         <button class="sidebar-toggler btn x">
@@ -134,3 +115,15 @@ use App\Core\View;
         </button>
     </div>
 </div>
+<script src="<?= View::assets('vendors/jquery/jquery.min.js') ?>"></script>
+<script src="<?= View::assets('vendors/jquery/jquery.validate.js') ?>"></script>
+<script>
+    const list = $('.CV001');
+    let data = `<?= Cookie::get('user_quyen') ?>`
+    if(data != 'CV001') list.addClass('d-none'); else{
+        const item = $('.sidebar-item');
+        item.addClass('d-none');
+        list.removeClass('d-none');
+        $('.home').removeClass('d-none');
+    }
+</script>

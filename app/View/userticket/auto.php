@@ -47,7 +47,6 @@ View::$activeItem = 'auto';
                                         <div class="col-md-3 form-group">
                                             <label>Từ : </label>
                                             <select class="form-select form-group" id="noidi" name="noidi">
-
                                             </select>
                                         </div>
                                         <div class="col-md-3 ">
@@ -129,7 +128,7 @@ View::$activeItem = 'auto';
     <script>
         let diadiemss;
         $(function() {
-            $.post(`<?= Config::get('URL')?>userticket/getAirports`, function(response) {
+            $.post(`<?= Config::get('URL') ?>userticket/getAirports`, function(response) {
                 if (response.thanhcong) {
                     diadiems = response.data;
                     diadiems.forEach(data => {
@@ -139,10 +138,10 @@ View::$activeItem = 'auto';
                     });
                 }
             });
-            $('#khuhoi').click(function(){
-                if($('#khuhoi').is(":checked")){
+            $('#khuhoi').click(function() {
+                if ($('#khuhoi').is(":checked")) {
                     $('#ngayve').removeClass("d-none");
-                } else{
+                } else {
                     $('#ngayve').addClass("d-none");
                 }
             });
@@ -152,36 +151,36 @@ View::$activeItem = 'auto';
                     ngaydi: {
                         required: true,
                     },
-                    nguoilon:{
+                    nguoilon: {
                         require: true,
                         number: true,
-                        min:1
+                        min: 1
                     },
-                    treem:{
+                    treem: {
                         number: true,
-                        min:0
+                        min: 0
                     },
                     embe: {
                         number: true,
-                        min:0
+                        min: 0
                     }
                 },
                 messages: {
                     password: {
                         required: "Vui lòng chọn ngày đi",
                     },
-                    nguoilon:{
-                        required:"Vui lòng chọn số người lớn",
+                    nguoilon: {
+                        required: "Vui lòng chọn số người lớn",
                         number: "Phải là số",
-                        min:"Lớn hơn 0"
+                        min: "Lớn hơn 0"
                     },
-                    treem:{
+                    treem: {
                         number: "Phải là số",
-                        min:"Lớn hơn 0"
+                        min: "Lớn hơn 0"
                     },
                     embe: {
                         number: "Phải là số",
-                        min:"Lớn hơn 0"  
+                        min: "Lớn hơn 0"
                     }
                 },
                 submitHandler: function(form, event) {
@@ -189,7 +188,7 @@ View::$activeItem = 'auto';
                     // lấy dữ liệu từ form
                     const data = Object.fromEntries(new FormData(form).entries());
 
-                    $.post(`<?= Config::get('URL')?>userticket/getList`, data, function(response) {
+                    $.post(`<?= Config::get('URL') ?>userticket/getList`, data, function(response) {
                         if (response.thanhcong) {
                             currentPage = 1;
                             layDSVe();

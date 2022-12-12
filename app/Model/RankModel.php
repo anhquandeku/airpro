@@ -6,19 +6,20 @@ use App\Core\Cookie;
 use App\Core\DatabaseFactory;
 use PDO;
 
-class RankModel{
-    public static function create($mahang, $tenhang, $mucdiem){
+class RankModel
+{
+    public static function create($mahang, $tenhang, $mucdiem)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "SELECT ma_hang_kh FROM `hang_khach_hang` WHERE muc_diem= :mucdiem";
         $query = $database->prepare($sql);
         $query->execute([':mucdiem' => $mucdiem]);
         $count = $query->rowCount();
-        if($count<1)
-        {
+        if ($count < 1) {
             $sql = "INSERT INTO  hang_khach_hang (ma_hang_kh,ten_hang,muc_diem,trang_thai)
                     VALUES (:mahang,:tenhang,:mucdiem, 1)";
             $query = $database->prepare($sql);
-            $query->execute([':mahang' => $mahang, ':tenhang' => $tenhang,':mucdiem' => $mucdiem]);
+            $query->execute([':mahang' => $mahang, ':tenhang' => $tenhang, ':mucdiem' => $mucdiem]);
             $count = $query->rowCount();
             if ($count == 1) {
                 return true;
@@ -28,15 +29,15 @@ class RankModel{
         return false;
     }
 
-    public static function update($mahang,$tenhang,$mucdiem){
+    public static function update($mahang, $tenhang, $mucdiem)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
         // $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         $sql1 = "SELECT ma_hang_kh FROM `hang_khach_hang` WHERE ma_hang_kh != :mahang and muc_diem= :mucdiem";
         $query2 = $database->prepare($sql1);
-        $query2->execute([':mahang' => $mahang,':mucdiem' => $mucdiem]);
+        $query2->execute([':mahang' => $mahang, ':mucdiem' => $mucdiem]);
         $count1 = $query2->rowCount();
-        if($count1<1)
-        {
+        if ($count1 < 1) {
             $sql = "UPDATE hang_khach_hang SET ten_hang  = :tenhang, muc_diem= :mucdiem WHERE ma_hang_kh= :mahang ";
             $query = $database->prepare($sql);
             $query->execute([':mahang' => $mahang, ':tenhang' => $tenhang, ':mucdiem' => $mucdiem]);
@@ -49,13 +50,14 @@ class RankModel{
         return false;
     }
 
-    public static function delete($mahang){
+    public static function delete($mahang)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
         $sql = "SELECT  ma_kh FROM `khach_hang` WHERE ma_hang_kh= :mahang";
         $query = $database->prepare($sql);
         $query->execute([':mahang' => $mahang]);
         $count = $query->rowCount();
-        if($count<1){
+        if ($count < 1) {
             $sql1 = "DELETE FROM `hang_khach_hang` WHERE ma_hang_kh= :mahang";
             $query1 = $database->prepare($sql1);
             $query1->execute([':mahang' => $mahang]);
@@ -63,16 +65,17 @@ class RankModel{
         }
         return 2;
     }
-    public static function deletes($mahang){
+    public static function deletes($mahang)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
         $raw = "(";
-        $i=0;
+        $i = 0;
         foreach ($mahang as $mahang) {
             $sql = "SELECT  ma_kh FROM `khach_hang` WHERE ma_hang_kh= :mahang";
             $query = $database->prepare($sql);
             $query->execute([':mahang' => $mahang]);
             $count = $query->rowCount();
-            if($count<1){
+            if ($count < 1) {
                 $i++;
                 $raw .= "'" . $mahang . "',";
             }
@@ -81,15 +84,16 @@ class RankModel{
         $raw .= ")";
 
         $sql1 = "DELETE from `hang_khach_hang`  WHERE  ma_hang_kh IN " . $raw;
-        $query1=$database->prepare($sql1);
+        $query1 = $database->prepare($sql1);
         $query1->execute();
-        $count= $query1->rowCount();
-        if ($count<1) {
+        $count = $query1->rowCount();
+        if ($count < 1) {
             return 0;
         }
         return $i;
     }
-    public static function getRank($mahang){
+    public static function getRank($mahang)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
         $query = $database->prepare("SELECT * FROM hang_khach_hang WHERE ma_hang_kh = :mahang LIMIT 1");
         $query->execute([':mahang' => $mahang]);
@@ -100,7 +104,8 @@ class RankModel{
         return null;
     }
 
-    public static function getList($page = 1, $rowsPerPage = 10){
+    public static function getList($page = 1, $rowsPerPage = 10)
+    {
         $limit = $rowsPerPage;
         $offset = $rowsPerPage * ($page - 1);
 
@@ -126,28 +131,27 @@ class RankModel{
         $response = [
             'page' => $page,
             'rowsPerPage' => $rowsPerPage,
-            'totalPage' => ceil(intval($totalRows) / $rowsPerPage),// 4 trang
+            'totalPage' => ceil(intval($totalRows) / $rowsPerPage), // 4 trang
             'data' => $data,
         ];
         return $response;
     }
-    public static function searchRank($search,$search2,$page = 1, $rowsPerPage = 10){
+    public static function searchRank($search, $search2, $page = 1, $rowsPerPage = 10)
+    {
         //echo "dsadasd";
         $limit = $rowsPerPage;
         $offset = $rowsPerPage * ($page - 1);
 
         $database = DatabaseFactory::getFactory()->getConnection();
-        $raw="SELECT * FROM  hang_khach_hang";
+        $raw = "SELECT * FROM  hang_khach_hang";
         if ($search2 == '0') {
             $raw .= ' WHERE (ma_hang_kh LIKE :search OR ten_hang LIKE :search OR muc_diem LIKE :search) AND trang_thai=1 LIMIT :limit OFFSET :offset';
         } else {
-            if ($search2 == '1'){
+            if ($search2 == '1') {
                 $raw .= ' WHERE (ma_hang_kh LIKE :search ) AND trang_thai=1 LIMIT :limit OFFSET :offset';
-            }
-            else if($search2 == '2'){
+            } else if ($search2 == '2') {
                 $raw .= ' WHERE (ten_hang LIKE :search ) AND trang_thai=1 LIMIT :limit OFFSET :offset';
-            }
-            else  if($search2 == '3'){
+            } else  if ($search2 == '3') {
                 $raw .= ' WHERE (muc_diem LIKE :search ) AND trang_thai=1 LIMIT :limit OFFSET :offset';
             }
         }
@@ -160,18 +164,16 @@ class RankModel{
         $query->bindValue(':search', $search, PDO::PARAM_STR);
         $query->execute();
         $data = $query->fetchAll();
-        
+
         $count = 'SELECT COUNT(ma_hang_kh) FROM hang_khach_hang';
         if ($search2 == '0') {
             $count .= ' WHERE (ma_hang_kh LIKE :search OR ten_hang LIKE :search OR muc_diem LIKE :search) AND trang_thai=1';
         } else {
-            if ($search2 == '1'){
+            if ($search2 == '1') {
                 $count .= ' WHERE (ma_hang_kh LIKE :search ) AND trang_thai=1';
-            }
-            else if($search2 == '2'){
+            } else if ($search2 == '2') {
                 $count .= ' WHERE (ten_hang LIKE :search ) AND trang_thai=1';
-            }
-            else if($search2 == '3'){
+            } else if ($search2 == '3') {
                 $count .= ' WHERE (muc_diem LIKE :search ) AND trang_thai=1';
             }
         }
@@ -189,7 +191,8 @@ class RankModel{
         ];
         return $response;
     }
-    public static function findOneByMahang($mahang){
+    public static function findOneByMahang($mahang)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
 
         $query = $database->prepare("SELECT * FROM hang_khach_hang WHERE ma_hang_kh = :mahang LIMIT 1");
@@ -200,7 +203,8 @@ class RankModel{
         }
         return null;
     }
-    public static function findOneBymucdiem($mucdiem){
+    public static function findOneBymucdiem($mucdiem)
+    {
         $database = DatabaseFactory::getFactory()->getConnection();
 
         $query = $database->prepare("SELECT * FROM hang_khach_hang WHERE muc_diem = :mucdiem LIMIT 1");

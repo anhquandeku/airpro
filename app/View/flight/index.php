@@ -746,13 +746,6 @@ View::$activeItem = 'flight';
         function layDSflightAjax() {
             $.get(`<?= Config::get('URL') ?>/flight/getList?rowsPerPage=10&page=${currentPage}`, function(response) {
                 console.log(response);  
-                // Không được gán biến response này ra ngoài function,
-                // vì function này bất đồng bộ, khi nào gọi api xong thì response mới có dữ liệu
-                // gán ra ngoài thì code ở ngoài chạy trc khi gọi api xong.
-                //data là danh sách usser
-                //page là trang hiện tại
-                // rowsPerpage là số dòng trên 1 trang
-                // totalPage là tổng số trang
                 const table1 = $('#table1 > tbody');
                 table1.empty();
                 checkedRows = [];
